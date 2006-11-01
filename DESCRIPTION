@@ -1,10 +1,10 @@
 Package: rcdk
-Version: 2.4
-Date: 2006-08-28
+Version: 2.5
+Date: 2006-11-01
 Title: rcdk - Interface to the CDK Libraries
 Author: Rajarshi Guha <rguha@indiana.edu>
 Maintainer: Rajarshi Guha <rguha@indiana.edu>
-Depends: R (>= 2.0.0), rJava
+Depends: R (>= 2.0.0), rJava, fingerprint
 License: GPL version 2 or later, Java part see doc
 Description: This package allows the user to access functionality in the
  CDK, a Java framework for cheminformatics. This allows the user to load
@@ -12,4 +12,4 @@ Description: This package allows the user to access functionality in the
  In addition the CDK API allows the user to view structures in 2D. The package
  can also use JChemPaint, to draw 2D structure and use them within R and Jmol to
  view structures in 3D
-Packaged: Wed Oct  4 10:20:58 2006; rajarshi
+Packaged: Wed Nov  1 10:55:09 2006; rajarshi

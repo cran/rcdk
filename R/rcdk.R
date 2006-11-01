@@ -73,7 +73,7 @@ get.fingerprint <- function(molecule, depth=6, size=1024) {
   bitset <- .jcall(bitset, "S", "toString")
   s <- gsub('[{}]','', bitset)
   s <- strsplit(s, split=',')[[1]]
-  return(as.numeric(s))
+  return(new("fingerprint", nbit=size, bits=as.numeric(s), provider="CDK"))
 }
 
 
