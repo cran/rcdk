@@ -22,8 +22,12 @@ require(rJava, quietly=TRUE)
     if (dlp!="") { # for Mac OS X we need to remove X11 from lib-path
         Sys.putenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
     }
-    cp<-paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
-    .jinit(classpath=cp)
+
+    jar.rcdk <- paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
+    jar.cdk <- paste(lib,pkg,"cont","cdk-svn-20061122.jar",sep=.Platform$file.sep)
+    jar.jmol <- paste(lib,pkg,"cont","Jmol.jar",sep=.Platform$file.sep)
+    jar.jcp <- paste(lib,pkg,"cont","cdk-jchempaint.jar",sep=.Platform$file.sep)        
+    .jinit(classpath=c(jar.jmol, jar.cdk, jar.jcp, jar.rcdk))
 }
     
 
