@@ -19,7 +19,6 @@ load.molecules(molfiles=NA)
   functions
 }
 \seealso{
-  \code{\link{view.molecule.3d}},
   \code{\link{view.molecule.2d}}
 }
 \keyword{programming}

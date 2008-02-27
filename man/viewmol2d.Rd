@@ -12,7 +12,7 @@ diagrams as well as grids of 2D structures.
 view.molecule.2d(molecule, ncol = 4, cellx = 200, celly = 200)
 }
 \arguments{
-  \item{molecule}{If a single molecules is to be viewed this should be a
+  \item{molecule}{If a single molecule is to be viewed this should be a
     reference to a \code{IAtomContainer} object. If multiple molecules
     are to be viewed this should be a \code{list} of such objects. If a
     character is specified then it is taken as the name of a file and
@@ -35,10 +35,7 @@ view.molecule.2d(molecule, ncol = 4, cellx = 200, celly = 200)
   specified, it will display a single molecule or multiple molecules
   depending on how many molecules are loaded.
   }
-\seealso{
-  \code{\link{view.molecule.table}},
-  \code{\link{view.molecule.3d}}
-}
+
 \keyword{programming}
 
 \author{Rajarshi Guha (\email{rguha@indiana.edu})}

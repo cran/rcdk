@@ -20,14 +20,14 @@ require(rJava, quietly=TRUE)
 .First.lib <- function(lib, pkg) {
     dlp<-Sys.getenv("DYLD_LIBRARY_PATH")
     if (dlp!="") { # for Mac OS X we need to remove X11 from lib-path
-        Sys.putenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
+        Sys.setenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
     }
 
     jar.rcdk <- paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
-    jar.cdk <- paste(lib,pkg,"cont","cdk-svn-20061122.jar",sep=.Platform$file.sep)
-    jar.jmol <- paste(lib,pkg,"cont","Jmol.jar",sep=.Platform$file.sep)
-    jar.jcp <- paste(lib,pkg,"cont","cdk-jchempaint.jar",sep=.Platform$file.sep)        
-    .jinit(classpath=c(jar.jmol, jar.cdk, jar.jcp, jar.rcdk))
+    jar.cdk <- paste(lib,pkg,"cont","cdk.jar",sep=.Platform$file.sep)
+    ##jar.jmol <- paste(lib,pkg,"cont","Jmol.jar",sep=.Platform$file.sep)
+    ##jar.jcp <- paste(lib,pkg,"cont","cdk-jchempaint.jar",sep=.Platform$file.sep)        
+    .jinit(classpath=c(jar.cdk, jar.rcdk))
 }
     
 
@@ -77,7 +77,9 @@ get.fingerprint <- function(molecule, depth=6, size=1024) {
   bitset <- .jcall(bitset, "S", "toString")
   s <- gsub('[{}]','', bitset)
   s <- strsplit(s, split=',')[[1]]
-  return(new("fingerprint", nbit=size, bits=as.numeric(s), provider="CDK"))
+  moltitle <- get.property(molecule, 'Title')
+  if (is.na(moltitle)) moltitle <- ''
+  return(new("fingerprint", nbit=size, bits=as.numeric(s), provider="CDK", name=moltitle))
 }
 
 

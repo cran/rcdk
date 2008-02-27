@@ -28,7 +28,7 @@
   A numeric vectors whose elements indicate the bit positions set to one
 }
 \seealso{
-  \code{\link{draw.molecule}}, \code{link{load.molecules}}
+  \code{link{load.molecules}}
 }
 \keyword{programming}
 
