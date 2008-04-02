@@ -1,8 +1,8 @@
 .packageName <- "rcdk"
 
 #
-# Rajarshi Guha <rajarshi@presidency.com>
-# 02/20/06
+# Rajarshi Guha <rguha@indiana.edu>
+# 04/01/08
 #
 # Update 08/28/06 - moved to rJava
 # Update 08/29/06 - added a method to remove hydrogens
@@ -33,7 +33,8 @@ require(rJava, quietly=TRUE)
 
 
 remove.hydrogens <- function(molecule) {
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
   newmol <- .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
@@ -44,7 +45,8 @@ remove.hydrogens <- function(molecule) {
 }
 
 get.total.hydrogen.count <- function(molecule) {
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
   .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
@@ -53,19 +55,40 @@ get.total.hydrogen.count <- function(molecule) {
          molecule);
 }
 
+get.exact.mass <- function(molecule) {
+    if (is.null(attr(molecule, 'jclass')) ||
+        attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+    stop("Must supply an IAtomContainer object")
+  }
+  .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
+         'D',
+         'getTotalExactMass',
+         molecule);
+}
+
 get.total.charge <- function(molecule) {
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
   .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
          'D',
          'getTotalCharge',
          molecule);
-}  
+}
+
+convert.implicit.to.explicit <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+    stop("Must supply an IAtomContainer object")
+  }
+  .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator', 'V', 'convertImplicitToExplicitHydrogens', molecule)
+}
 
 
 get.fingerprint <- function(molecule, depth=6, size=1024) {
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
 
@@ -82,5 +105,34 @@ get.fingerprint <- function(molecule, depth=6, size=1024) {
   return(new("fingerprint", nbit=size, bits=as.numeric(s), provider="CDK", name=moltitle))
 }
 
+get.atoms <- function(object) {
+  if (is.null(attr(object, 'jclass')))
+    stop("object must be of class IAtomContainer or IObject or IBond")
+  
+  if (attr(object, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer" &&
+      attr(object, 'jclass') != "org/openscience/cdk/interfaces/IObject" &&
+      attr(object, 'jclass') != "org/openscience/cdk/interfaces/IBond")
+    stop("object must be of class IAtomContainer or IObject or IBond")
+
+  natom <- .jcall(object, "I", "getAtomCount")
+  atoms <- list()
+  for (i in 0:(natom-1))
+    atoms[[i+1]] <- .jcall(object, "Lorg/openscience/cdk/interfaces/IAtom;", "getAtom", as.integer(i))
+  atoms
+}
+
+get.bonds <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')))
+    stop("molecule must be of class IAtomContainer or IMolecule")
+  if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer" &&
+      attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IMolecule")
+    stop("molecule must be of class IAtomContainer or IMolecule")
+
+  nbond <- .jcall(molecule, "I", "getBondCount")
+  bonds <- list()
+  for (i in 0:(nbond-1))
+    bonds[[i+1]] <- .jcall(molecule, "Lorg/openscience/cdk/interfaces/IBond;", "getBond", as.integer(i))
+  bonds
+}
 
 

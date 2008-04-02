@@ -1,0 +1,8 @@
+v2.8 - Updated code to provide accessors for atoms and bonds of a molecule. 
+Also provide methods to access atom and bond properties. Currently, setters
+for these objects are not provided
+
+v2.7 - Removed support for JChemPaint due to it being in flux at this point. Also 
+removed support for viewing tables of 3D structures. Restructured the descriptor
+functions to utilize descriptor names and i general make descriptor calculations
+more R-like
