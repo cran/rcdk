@@ -1,3 +1,5 @@
+v2.8.1 - Updated to fix some missing classes in the CDK distribution
+
 v2.8 - Updated code to provide accessors for atoms and bonds of a molecule. 
 Also provide methods to access atom and bond properties. Currently, setters
 for these objects are not provided
