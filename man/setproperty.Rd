@@ -20,9 +20,17 @@ set.property(molecule, key, value)
 \value{
   None
 }
+\examples{
+smiles <- 'c1ccccc1'
+mol <- parse.smiles(smiles)
+set.property(mol, 'prop1', 23.45)
+set.property(mol, 'prop2', 'inactive')
+get.properties(mol)
+}
 \keyword{programming}
 \seealso{
   \code{\link{get.property}},
+  \code{\link{get.properties}},
   \code{\link{remove.property}}
 }
 \author{Rajarshi Guha (\email{rguha@indiana.edu})}

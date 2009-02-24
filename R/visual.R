@@ -22,7 +22,7 @@
 ##       class(molecule) != 'jobjRef') {
 ##     stop("Must supply a filename, single molecule object or list of molecule objects")
 ##   }
-  
+
 ##   if (class(molecule) == 'character') {
 ##     molecule <- load.molecules(molecule)
 ##     if (length(molecule) == 1) molecule <- molecule[[1]]
@@ -71,55 +71,55 @@ view.molecule.2d <- function(molecule, ncol = 4, cellx = 200, celly = 200) {
   }
 }
 
-## fnames - vector of file names
-## cnames - vector of column names 
-## datatable - data.frame of values associated with a structure
-##
-## The number of column names should be 1+ncol(datatable), since
-## the final table will have a column showing the structures
+view.table <- function(molecules, dat, cellx = 200, celly = 200) {
+  if (cellx <= 0 || celly <= 0) {
+    stop("Invalid cell width or height specified")
+  }
 
-.view.molecule.table <- function(fnames, cnames, datatable) {
-  if (!is.matrix(datatable) && !is.data.frame(datatable)) {
+  if (!is.list(molecules)) {
+    stop("Must provide a list of molecule objects")
+  }
+  
+  if (!is.matrix(dat) && !is.data.frame(dat)) {
     stop("datatable must be a matrix or data.frame")
   }
 
-  if (length(fnames) != nrow(datatable)) {
-    stop("The number of rows in datatable must be the same as the number of files to view")
+  if (length(molecules) != nrow(dat)) {
+    stop("The number of rows in datatable must be the same as the number of molecules")
   }
+
+  if (is.null(names(dat))) cnames <- c('Molecule', paste('V',1:ncol(dat)), sep='')
+  else cnames <- c('Molecule', names(dat))
   
-  if (length(cnames) != ncol(datatable)+1) {
-    warning("Column names should be included for the final table. Using default names")
-    cnames <- paste("Column", 1:(ncol(datatable)+1), sep='')
-  }
-
-
   ## we need to convert the R vectors to Java arrays
   ## and the datatable data.frame to an Object[][]
-  farr <- .jarray(fnames)
+  molecules <- .jarray(molecules, "org/openscience/cdk/interfaces/IAtomContainer")
   carr <- .jarray(cnames)
-  
+
   rows <- list()
-  for (i in 1:nrow(datatable)) {
+  for (i in 1:nrow(dat)) {
     row <- list()
     
     ## for a given row we have to construct a Object[] and add
     ## it to our list
-    for (j in 1:ncol(datatable)) {
-      if (is.numeric(datatable[i,j])) {
-        row[j] <- .jnew("java/lang/Double", datatable[i,j])
+    for (j in 1:ncol(dat)) {
+      if (is.numeric(dat[i,j])) {
+        row[j] <- .jnew("java/lang/Double", dat[i,j])
       }
-      else if (is.character(datatable[i,j])) {
-        row[j] <- .jnew("java/lang/String", as.character(datatable[i,j]))
+      else if (is.character(dat[i,j]) || is.factor(dat[i,j]) || is.logical(dat[i,j])) {
+        row[j] <- .jnew("java/lang/String", as.character(dat[i,j]))
       }
     }
-    rows[[i]] <- .jarray(row, "java/lang/Object")
+    rows[i] <- .jarray(row, "java/lang/Object")
   }
 
   ## now make our object table
-  xval.arr <- .jarray(rows, "[Ljava/lang/Object")
-  obj <- .jnew("org/guha/rcdk/view/ViewMolecule3DDataTable",
-               farr, carr,xval.arr)
-
+  xval.arr <- .jarray(rows, "[Ljava/lang/Object;")
+  obj <- .jnew("org/guha/rcdk/view/ViewMolecule2DDataTable",
+               molecules, carr, xval.arr)
+  .jcall(obj, "V", "setCellX", as.integer(cellx))
+  .jcall(obj, "V", "setCellY", as.integer(celly))
+  .jcall(obj, "V", "display")
 }
 
 

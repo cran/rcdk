@@ -17,8 +17,16 @@ get.property(molecule, key)
 \value{
  The value of the property is the key is found else NA
 }
+\examples{
+smiles <- 'c1ccccc1'
+mol <- parse.smiles(smiles)
+set.property(mol, 'prop1', 23.45)
+set.property(mol, 'prop2', 'inactive')
+get.property(mol, 'prop1')
+}
 \keyword{programming}
 \seealso{
+ \code{\link{get.properties}},
   \code{\link{set.property}},
   \code{\link{remove.property}}
 }

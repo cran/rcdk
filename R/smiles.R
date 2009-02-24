@@ -25,6 +25,6 @@ parse.smiles <- function(smiles, parser) {
   } else {
     mol <- .jcall(parser, "Lorg/openscience/cdk/interfaces/IMolecule;", "parseSmiles", smiles)
   }
-  if (is.null(mol)) return(NULL)
+  if (is.null(mol)) return(NA)
   else return(.jcast(mol, "org/openscience/cdk/interfaces/IAtomContainer"))
 }

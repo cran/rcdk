@@ -1,4 +1,7 @@
-v2.8.1 - Updated to fix some missing classes in the CDK distribution
+v2.9 - Updated to the new package structure where the CDK libs are removed.
+As a result, this package now depends on the rcdklibs package
+
+v2.8.1 - Fixed typos in the docs
 
 v2.8 - Updated code to provide accessors for atoms and bonds of a molecule. 
 Also provide methods to access atom and bond properties. Currently, setters

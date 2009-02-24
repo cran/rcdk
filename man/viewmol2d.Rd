@@ -34,8 +34,14 @@ view.molecule.2d(molecule, ncol = 4, cellx = 200, celly = 200)
   molecules are displayed as a grid of 2D viewers. In case a file is
   specified, it will display a single molecule or multiple molecules
   depending on how many molecules are loaded.
-  }
 
+  Due to event handling issues, the depiction will show on OS X, but
+  the window will be unresponsive. The depictions will work fine on
+  Linux and Windows.
+  }
+\seealso{
+  \code{\link{view.table}}
+}
 \keyword{programming}
 
 \author{Rajarshi Guha (\email{rguha@indiana.edu})}

@@ -1,14 +1,6 @@
 .packageName <- "rcdk"
 
-#
-# Rajarshi Guha <rguha@indiana.edu>
-# 04/01/08
-#
-# Update 08/28/06 - moved to rJava
-# Update 08/29/06 - added a method to remove hydrogens
-# Update 09/16/06 - added methods to write molecules, get/set properties
-#
-# .First.lib code taken from iPlots
+## .First.lib code taken from iPlots
 
 require(rJava, quietly=TRUE)
 
@@ -18,18 +10,15 @@ require(rJava, quietly=TRUE)
 }
 
 .First.lib <- function(lib, pkg) {
-    dlp<-Sys.getenv("DYLD_LIBRARY_PATH")
-    if (dlp!="") { # for Mac OS X we need to remove X11 from lib-path
-        Sys.setenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
-    }
+  dlp<-Sys.getenv("DYLD_LIBRARY_PATH")
+  if (dlp!="") { # for Mac OS X we need to remove X11 from lib-path
+    Sys.setenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
+  }
 
-    jar.rcdk <- paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
-    jar.cdk <- paste(lib,pkg,"cont","cdk.jar",sep=.Platform$file.sep)
-    ##jar.jmol <- paste(lib,pkg,"cont","Jmol.jar",sep=.Platform$file.sep)
-    ##jar.jcp <- paste(lib,pkg,"cont","cdk-jchempaint.jar",sep=.Platform$file.sep)        
-    .jinit(classpath=c(jar.cdk, jar.rcdk))
+  jar.rcdk <- paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
+  .jinit(classpath=c(jar.rcdk))
 }
-    
+
 
 
 remove.hydrogens <- function(molecule) {
@@ -56,8 +45,8 @@ get.total.hydrogen.count <- function(molecule) {
 }
 
 get.exact.mass <- function(molecule) {
-    if (is.null(attr(molecule, 'jclass')) ||
-        attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
   .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
@@ -86,23 +75,36 @@ convert.implicit.to.explicit <- function(molecule) {
 }
 
 
-get.fingerprint <- function(molecule, depth=6, size=1024) {
-  if (is.null(attr(molecule, 'jclass')) ||
-      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
-    stop("Must supply an IAtomContainer object")
+get.fingerprint <- function(molecule, type = 'standard', depth=6, size=1024) {
+  if (is.null(attr(molecule, 'jclass'))) stop("Must supply an IAtomContainer or something coercable to it")
+  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+    ## try casting it
+    molecule <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
   }
 
   mode(size) <- 'integer'
   mode(depth) <- 'integer'
   
-  fingerprinter <- .jnew('org/openscience/cdk/fingerprint/Fingerprinter', size, depth)
+  fingerprinter <-
+    switch(type,
+           standard = .jnew('org/openscience/cdk/fingerprint/Fingerprinter', size, depth),
+           extended = .jnew('org/openscience/cdk/fingerprint/ExtendedFingerprinter', size, depth),
+           graph = .jnew('org/openscience/cdk/fingerprint/GraphOnlyFingerprinter', size, depth),
+           maccs = .jnew('org/openscience/cdk/fingerprint/MACCSFingerprinter'),
+           estate = .jnew('org/openscience/cdk/fingerprint/EStateFingerprinter'))
+  if (is.null(fingerprinter)) stop("Invalid fingerprint type specified")
+  
   bitset <- .jcall(fingerprinter, "Ljava/util/BitSet;", "getFingerprint", molecule)
+  if (type == 'maccs') nbit <- 166
+  else if (type == 'estate') nbit <- 79
+  else nbit <- size
+  
   bitset <- .jcall(bitset, "S", "toString")
   s <- gsub('[{}]','', bitset)
   s <- strsplit(s, split=',')[[1]]
   moltitle <- get.property(molecule, 'Title')
   if (is.na(moltitle)) moltitle <- ''
-  return(new("fingerprint", nbit=size, bits=as.numeric(s), provider="CDK", name=moltitle))
+  return(new("fingerprint", nbit=nbit, bits=as.numeric(s)+1, provider="CDK", name=moltitle))
 }
 
 get.atoms <- function(object) {
@@ -135,4 +137,22 @@ get.bonds <- function(molecule) {
   bonds
 }
 
+do.aromaticity <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')))
+    stop("molecule must be of class IAtomContainer or IMolecule")
+  if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
+    stop("molecule must be of class IAtomContainer or IMolecule")
 
+  .jcall("org.openscience.cdk.aromaticity.CDKHueckelAromaticityDetector",
+         "Z", "detectAromaticity", molecule)
+}
+
+do.typing <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')))
+    stop("molecule must be of class IAtomContainer or IMolecule")
+  if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
+    stop("molecule must be of class IAtomContainer or IMolecule")
+
+  .jcall("org.openscience.cdk.tools.manipulator.AtomContainerManipulator",
+         "V", "percieveAtomTypesAndConfigureAtoms", molecule)
+}

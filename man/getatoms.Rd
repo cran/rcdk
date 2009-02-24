@@ -11,8 +11,8 @@
 get.atoms(object)
 }
 \arguments{
-  \item{object}{A \code{jObjRef} representing an IAtomContainer,
-  IMolecule or IBond object}
+  \item{object}{A \code{jObjRef} representing an \code{IAtomContainer},
+  \code{IMolecule} or \code{IBond} object}
 }
 \value{
   A list containing \code{jobjRef}'s to a CDK \code{IAtom} object

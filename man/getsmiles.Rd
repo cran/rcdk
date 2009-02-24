@@ -18,6 +18,11 @@ get.smiles(molecule)
 \value{
   An R character object containing the SMILES
 }
+\examples{
+sp <- get.smiles.parser()
+smiles <- c('CCC', 'CCN', 'CCN(C)(C)', 'c1ccccc1Cc1ccccc1','C1CCC1CC(CN(C)(C))CC(=O)CC')
+mols <- sapply(smiles, parse.smiles, parser=sp)
+}
 \keyword{programming}
 
 \author{Rajarshi Guha (\email{rguha@indiana.edu})}
