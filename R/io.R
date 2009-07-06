@@ -16,7 +16,7 @@ write.molecules <- function(mols, filename, together=TRUE, write.props=FALSE) {
 
 ## molfiles should be a vector of strings. Returns a list of
 ## IAtomContainer objects
-load.molecules <- function(molfiles=NA, aromaticity = TRUE, typing = TRUE, verbose=FALSE) {
+load.molecules <- function(molfiles=NA, aromaticity = TRUE, typing = TRUE, isotopes = TRUE, verbose=FALSE) {
   if (any(is.na(molfiles))) {
     stop("Must supply a vector of file names")
   }
@@ -47,7 +47,7 @@ load.molecules <- function(molfiles=NA, aromaticity = TRUE, typing = TRUE, verbo
   molfiles <- molfiles[ !is.na(molfiles) ]
   farr <- .jarray(molfiles, contents.class = 'S')
   molecules <- .jcall('org/guha/rcdk/util/Misc', '[Lorg/openscience/cdk/interfaces/IAtomContainer;',
-                      'loadMolecules', farr, aromaticity, typing,
+                      'loadMolecules', farr, aromaticity, typing, isotopes,
                       check=FALSE)
   exception <- .jgetEx(clear = TRUE)
   if (!is.null(exception)) {

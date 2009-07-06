@@ -156,3 +156,18 @@ do.typing <- function(molecule) {
   .jcall("org.openscience.cdk.tools.manipulator.AtomContainerManipulator",
          "V", "percieveAtomTypesAndConfigureAtoms", molecule)
 }
+
+do.isotopes <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')))
+    stop("molecule must be of class IAtomContainer or IMolecule")
+  if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
+    stop("molecule must be of class IAtomContainer or IMolecule")
+
+  builder <- .jcall(.jnew('org/openscience/cdk/ChemObject'),
+                    'Lorg/openscience/cdk/interfaces/IChemObjectBuilder;', 'getBuilder')
+  ifac <- .jcall('org.openscience.cdk.config.IsotopeFactory',
+                 'Lorg/openscience/cdk/config/IsotopeFactory;',
+                 'getInstance', builder)
+  .jcall(ifac, 'V', 'configureAtoms', molecule)
+
+}

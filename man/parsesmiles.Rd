@@ -9,7 +9,8 @@
   not have any 2D or 3D coordinates.
 
   Note that the molecules obtained from this method will not have any
-  aromaticity perception or atom typing done on them. This is in
+  aromaticity perception, atom typing or isotopic configuration 
+  done on them. This is in
   contrast to the \link{load.molecules} method. Thus, you should
   perform this steps manually on the molecules.
 }
@@ -41,6 +42,7 @@ mols <- lapply(smiles, parse.smiles)
   \code{\link{get.smiles.parser}},
   \code{\link{view.molecule.2d}},
   \code{\link{do.aromaticity}},
-  \code{\link{do.typing}}
+  \code{\link{do.typing}},
+  \code{\link{do.isotopes}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}
