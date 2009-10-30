@@ -46,6 +46,8 @@
 ## }
 
 view.molecule.2d <- function(molecule, ncol = 4, cellx = 200, celly = 200) {
+  stop("Currently disabled")
+  
   if (class(molecule) != 'character' &&
       class(molecule) != 'list' &&
       class(molecule) != 'jobjRef') {
@@ -72,6 +74,8 @@ view.molecule.2d <- function(molecule, ncol = 4, cellx = 200, celly = 200) {
 }
 
 view.table <- function(molecules, dat, cellx = 200, celly = 200) {
+  stop("Currently disabled")
+  
   if (cellx <= 0 || celly <= 0) {
     stop("Invalid cell width or height specified")
   }

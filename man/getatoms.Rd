@@ -23,4 +23,4 @@ get.atoms(object)
   \code{\link{get.point3d}},
   \code{\link{get.symbol}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

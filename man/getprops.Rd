@@ -30,4 +30,4 @@ get.properties(mol)
   \code{\link{set.property}},
   \code{\link{remove.property}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

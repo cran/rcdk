@@ -44,4 +44,4 @@ view.molecule.2d(molecule, ncol = 4, cellx = 200, celly = 200)
 }
 \keyword{programming}
 
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

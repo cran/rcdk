@@ -22,4 +22,4 @@ get.bonds(molecule)
   \code{\link{get.atoms}},
   \code{\link{get.connected.atom}},
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

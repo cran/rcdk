@@ -18,4 +18,4 @@ get.total.charge(molecule)
 }
 \keyword{programming}
 
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

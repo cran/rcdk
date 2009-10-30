@@ -37,4 +37,4 @@ descs <- eval.desc(mols, dnames, verbose=TRUE)
 }
 \keyword{programming}
 
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

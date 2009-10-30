@@ -22,4 +22,4 @@ get.smiles.parser()
   \code{\link{get.smiles.parser}},
   \code{\link{view.molecule.2d}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

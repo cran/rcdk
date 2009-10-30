@@ -29,4 +29,4 @@ convert.implicit.to.explicit(molecule)
 \seealso{
   \code{\link{get.atoms}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

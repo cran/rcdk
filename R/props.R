@@ -2,10 +2,12 @@ set.property <- function(molecule, key, value) {
   if (!is.character(key)) {
     stop("The property key must be a character")
   }
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
-    stop("Must supply an IAtomContainer object")
-  }
-
+  if (!.check.class(molecule, "org/openscience/cdk/interfaces/IAtomContainer") &&
+      !.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    stop("Must supply an AtomContainer or IAtomContainer object")
+  if (.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
+  
   if (is.character(value)) {
     value <- .jcall('org/guha/rcdk/util/Misc', 'V', 'setProperty',
                     molecule, as.character(key),
@@ -28,9 +30,11 @@ get.property <- function(molecule, key) {
   if (!is.character(key)) {
     stop("The property key must be a character")
   }
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
-    stop("Must supply an IAtomContainer object")
-  }
+  if (!.check.class(molecule, "org/openscience/cdk/interfaces/IAtomContainer") &&
+      !.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    stop("Must supply an AtomContainer or IAtomContainer object")
+  if (.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
 
   value <- .jcall('org/guha/rcdk/util/Misc', 'Ljava/lang/Object;', 'getProperty',
                   molecule, as.character(key))
@@ -39,28 +43,33 @@ get.property <- function(molecule, key) {
 }
 
 get.properties <- function(molecule) {
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer" &&
-      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IMolecule") {
-    stop("Must supply an IAtomContainer or IMolecule object")
-  }
+  if (!.check.class(molecule, "org/openscience/cdk/interfaces/IAtomContainer") &&
+      !.check.class(molecule, "org/openscience/cdk/AtomContainer") &&
+      !.check.class(molecule, "org/openscience/cdk/Molecule") &&
+      !.check.class(molecule, "org/openscience/cdk/interfaces/IMolecule"))
+    stop("Must supply an AtomContainer or IAtomContainer object")
+  if (.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
+
   map <- .jcall(molecule, "Ljava/util/Map;", method = "getProperties")
   keySet <- .jcall(map, "Ljava/util/Set;", method="keySet")
   size <- .jcall(map, "I", method="size")
   keyIter <- .jcall(keySet, "Ljava/util/Iterator;", method="iterator")
   keys <- list()
   for (i in 1:size) {
-    keys[[i]] <-.jcall(keyIter, "Ljava/lang/Object;", method="next")
+    ##    keys[[i]] <-.jcall(keyIter, "Ljava/lang/Object;", method="next")
+    keys[[i]] <- J(keyIter, "next")
   }
 
   
   values <- list()
   for (i in 1:length(keys)) {
-    values[[i]] <- .jcall(map, "Ljava/lang/Object;", "get", keys[[i]] )
+    values[[i]] <- .jcall(map, "Ljava/lang/Object;", "get", .jcast(new(J("java/lang/String"),keys[[i]]),"java/lang/Object") )
   }
 
   ret <- list()
   for (i in 1:length(keys)) {
-    k <- .jcall(keys[[i]], "Ljava/lang/String;", "toString")
+    k <- keys[[i]]
     if (is.jnull(values[[i]])) ret[[k]] <- NA
     else ret[[k]] <- .jsimplify(values[[i]])
   }
@@ -71,9 +80,11 @@ remove.property <- function(molecule, key) {
   if (!is.character(key)) {
     stop("The property key must be a character")
   }
-  if (attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
-    stop("Must supply an IAtomContainer object")
-  }
+  if (!.check.class(molecule, "org/openscience/cdk/interfaces/IAtomContainer") &&
+      !.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    stop("Must supply an AtomContainer or IAtomContainer object")
+  if (.check.class(molecule, "org/openscience/cdk/AtomContainer"))
+    atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
 
   if (is.na(get.property(molecule, key))) {
     warning("No such key exists")

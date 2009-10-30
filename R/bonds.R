@@ -11,15 +11,22 @@
 ##
 
 get.connected.atom <- function(bond, atom) {
-  if (is.null(attr(bond, 'jclass')) ||
-      attr(bond, "jclass") != "org/openscience/cdk/interfaces/IBond") {
-    stop("Must supply an IBond object for bond")
-  }
+  if (is.null(attr(bond,"jclass")) || is.null(attr(atom,"jclass")))
+    stop("Must supply an IBond object or Bond")
+  
+  if (!.check.class(bond, "org/openscience/cdk/interfaces/IBond") &&
+      !.check.class(bond, "org/openscience/cdk/Bond"))
+    stop("Must supply an IBond or Bond object")
 
-  if (is.null(attr(atom, 'jclass')) ||
-      attr(atom, "jclass") != "org/openscience/cdk/interfaces/IAtom") {
-    stop("Must supply an IAtom object for atom")
-  }
+  if (.check.class(bond, "org/openscience/cdk/Bond"))
+    bond <- .jcast(bond, "org/openscience/cdk/interfaces/IBond")
 
+  if (!.check.class(atom, "org/openscience/cdk/interfaces/IAtom") &&
+      !.check.class(atom, "org/openscience/cdk/Atom"))
+    stop("Must supply an IAtom or Atom object")
+  
+  if (.check.class(atom, "org/openscience/cdk/Atom"))
+    atom <- .jcast(atom, "org/openscience/cdk/interfaces/IAtom")
+  
   .jcall(bond, "Lorg/openscience/cdk/interfaces/IAtom;", "getConnectedAtom", atom);
 }

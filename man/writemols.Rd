@@ -41,4 +41,4 @@ write.molecules(mols, filename, together=TRUE, write.props=FALSE)
   \code{\link{get.property}},  
   \code{\link{remove.property}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

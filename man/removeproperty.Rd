@@ -22,4 +22,4 @@ remove.property(molecule, key)
   \code{\link{get.property}},
   \code{\link{set.property}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

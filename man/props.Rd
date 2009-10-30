@@ -32,4 +32,4 @@ is obtained from a SMILES, explicit hydrogens must be added.
 \seealso{
 	\code{\link{eval.desc}}
 }
-\author{Rajarshi Guha (\email{rguha@indiana.edu})}
+\author{Rajarshi Guha (\email{rajarshi.guha@gmail.com})}

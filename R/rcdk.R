@@ -4,6 +4,10 @@
 
 require(rJava, quietly=TRUE)
 
+.check.class <- function(obj, klass) {
+  attr(obj, "jclass") == klass
+}
+
 .trim.whitespace <- function(x) {
   x <- gsub('^[[:space:]]+', '', x)
   gsub('[[:space:]]+$', '',x)
