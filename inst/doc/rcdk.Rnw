@@ -272,6 +272,24 @@ This is quite a simplistic check that just looks at whether the X, Y
 or Z coordinates are constant. To be more rigorous one could evaluate
 the moments of inertia about the axes.
 
+\subsection{Substructure Matching}
+The CDK library supports substructure searches using SMARTS (or
+SMILES) patterns. The implementation allows one to check whether a
+target molecule contains a substructure or not as well as to retrieve
+the atoms and bonds of the target molecule that match the query
+substructure. At this point, the \Rpackage{rcdk} only support the
+former operation - given a query pattern, does it occur or not in a
+list of target molecules. The \texttt{match} method of this package is
+modeled after the same method in the \Rpackage{base} package. An
+example of its usage would be to identify molecules that contain a
+carbon atom that has exactly two bonded neighbors.
+<<<eval=TRUE>>=
+mols <- sapply(c('CC(C)(C)C','c1ccc(Cl)cc1C(=O)O', 'CCC(N)(N)CC'), parse.smiles)
+query <- '[#6D2]'
+hits <- match(query, mols)
+print(hits)
+@ 
+
 \section{Molecular Descriptors}
 
 Probably the most desired feature when doing predictive modeling of

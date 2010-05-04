@@ -23,12 +23,11 @@ get.formula <- function(mf, charge=0) {
   if(!is.character(mf)) {
     stop("Must supply a Formula string");
   }else{
-    dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                   "Lorg/openscience/cdk/DefaultChemObjectBuilder;",
-                   "getInstance");
-    dcob <- .jcast(dcob, "org/openscience/cdk/interfaces/IChemObjectBuilder");
+    dcob <- .cdkFormula.createChemObject()
     molecularformula <- .jcall(dcob,"Lorg/openscience/cdk/interfaces/IMolecularFormula;",
                                "newMolecularFormula");
+##    molecularformula <- .jcast(.jnew("org/openscience/cdk/formula/MolecularFormula"),
+##                               "org/openscience/cdk/interfaces/IMolecularFormula")
     molecularFormula <- .jcall(manipulator,
                                "Lorg/openscience/cdk/interfaces/IMolecularFormula;",
                                "getMolecularFormula",
@@ -259,17 +258,16 @@ generate.formula <- function(mass, window=0.01,
 .cdkFormula.createChemObject <- function(){
   dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
                  "Lorg/openscience/cdk/DefaultChemObjectBuilder;",
-                 "getInstance");
-  dcob <- .jcast(dcob, "org/openscience/cdk/interfaces/IChemObjectBuilder");
+                 "getInstance")
+  dcob <- .jcast(dcob, "org/openscience/cdk/interfaces/IChemObjectBuilder")  
   dcob
 }
 .cdkFormula.createFormulaObject <- function(){
-  dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                 "Lorg/openscience/cdk/DefaultChemObjectBuilder;",
-                 "getInstance");
-  dcob <- .jcast(dcob, "org/openscience/cdk/interfaces/IChemObjectBuilder");
-  cfob <- .jcall(dcob,"Lorg/openscience/cdk/interfaces/IMolecularFormula;","newMolecularFormula");
+  dcob <- .cdkFormula.createChemObject()
+  cfob <- .jcall(dcob,"Lorg/openscience/cdk/interfaces/IMolecularFormula;","newMolecularFormula");  
   cfob
+##  .jcast(.jnew("org/openscience/cdk/formula/MolecularFormula"),
+##         "org/openscience/cdk/interfaces/IMolecularFormula")
 }
 
 #############################################################

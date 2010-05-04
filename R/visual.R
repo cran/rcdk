@@ -46,7 +46,6 @@
 ## }
 
 view.molecule.2d <- function(molecule, ncol = 4, cellx = 200, celly = 200) {
-  stop("Currently disabled")
   
   if (class(molecule) != 'character' &&
       class(molecule) != 'list' &&
@@ -64,7 +63,7 @@ view.molecule.2d <- function(molecule, ncol = 4, cellx = 200, celly = 200) {
     if (attr(molecule, "jclass") != 'org/openscience/cdk/interfaces/IAtomContainer') {
       stop("Supplied object should be a Java reference to an IAtomContainer")
     }    
-    v2d <- .jnew("org/guha/rcdk/view/ViewMolecule2D", molecule)
+    v2d <- .jnew("org/guha/rcdk/view/ViewMolecule2D", molecule, as.integer(cellx), as.integer(celly))
     ret <- .jcall(v2d, "V", "draw")
   } else { ## multiple molecules
     array <- .jarray(molecule, contents.class="org/openscience/cdk/interfaces/IAtomContainer")
@@ -128,3 +127,10 @@ view.table <- function(molecules, dat, cellx = 200, celly = 200) {
 
 
 
+view.image.2d <- function(molecule, width=200, height=200) {
+  if (attr(molecule,"jclass") != "org/openscience/cdk/interfaces/IAtomContainer")
+    stop("Must supply an IAtomContainer object")
+  mi <- .jnew("org/guha/rcdk/view/MoleculeImage", molecule)
+  bytes <- .jcall(mi, "[B", "getBytes", as.integer(width), as.integer(height))
+  return(readPNG(bytes))
+}

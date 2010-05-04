@@ -54,6 +54,7 @@ get.properties <- function(molecule) {
   map <- .jcall(molecule, "Ljava/util/Map;", method = "getProperties")
   keySet <- .jcall(map, "Ljava/util/Set;", method="keySet")
   size <- .jcall(map, "I", method="size")
+  if (size == 0) return(list())
   keyIter <- .jcall(keySet, "Ljava/util/Iterator;", method="iterator")
   keys <- list()
   for (i in 1:size) {
