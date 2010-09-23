@@ -25,6 +25,9 @@ require(rJava, quietly=TRUE)
 }
 
 
+cdk.version <- function() {
+  .jcall("org.openscience.cdk.CDK", "S", "getVersion")
+}
 
 remove.hydrogens <- function(molecule) {
   if (is.null(attr(molecule, 'jclass')) ||
@@ -88,12 +91,11 @@ convert.implicit.to.explicit <- function(molecule) {
       attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
-  if (any(is.null(unlist(lapply(get.atoms(molecule), .jcall, returnSig = "Ljava/lang/Integer;", method="getHydrogenCount"))))) {
+  if (any(is.null(unlist(lapply(get.atoms(molecule), .jcall, returnSig = "Ljava/lang/Integer;", method="getImplicitHydrogenCount"))))) {
     ## add them in
     dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                   "Lorg/openscience/cdk/DefaultChemObjectBuilder;",
+                   "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
                    "getInstance")
-    dcob <- .jcast(dcob, "org/openscience/cdk/interfaces/IChemObjectBuilder")  
     hadder <- .jcall("org/openscience/cdk/tools/CDKHydrogenAdder", "Lorg/openscience/cdk/tools/CDKHydrogenAdder;",
                      "getInstance", dcob)
     .jcall(hadder, "V", "addImplicitHydrogens", molecule)
@@ -118,12 +120,14 @@ get.fingerprint <- function(molecule, type = 'standard', depth=6, size=1024) {
            extended = .jnew('org/openscience/cdk/fingerprint/ExtendedFingerprinter', size, depth),
            graph = .jnew('org/openscience/cdk/fingerprint/GraphOnlyFingerprinter', size, depth),
            maccs = .jnew('org/openscience/cdk/fingerprint/MACCSFingerprinter'),
+           pubchem = .jnew('org/openscience/cdk/fingerprint/PubchemFingerprinter'),
            estate = .jnew('org/openscience/cdk/fingerprint/EStateFingerprinter'))
   if (is.null(fingerprinter)) stop("Invalid fingerprint type specified")
   
   bitset <- .jcall(fingerprinter, "Ljava/util/BitSet;", "getFingerprint", molecule)
   if (type == 'maccs') nbit <- 166
   else if (type == 'estate') nbit <- 79
+  else if (type == 'pubchem') nbit <- 881
   else nbit <- size
   
   bitset <- .jcall(bitset, "S", "toString")
