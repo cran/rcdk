@@ -57,10 +57,17 @@ get.exact.mass <- function(molecule) {
       attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
-  .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
-         'D',
-         'getTotalExactMass',
-         molecule);
+  ret <- .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
+                'D',
+                'getTotalExactMass',
+                molecule,
+                check=FALSE)
+  ex <- .jgetEx(clear=TRUE)
+  if (is.null(ex)) return(ret)
+  else{
+    print(ex)
+    stop("Couldn't get exact mass. Maybe you have not performed aromaticity, atom type or isotope configuration?")
+  }
 }
 
 get.natural.mass <- function(molecule) {
@@ -68,10 +75,17 @@ get.natural.mass <- function(molecule) {
       attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
-  .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
-         'D',
-         'getNaturalExactMass',
-         molecule);
+  ret <- .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
+                'D',
+                'getNaturalExactMass',
+                molecule,
+                check=FALSE)
+  ex <- .jgetEx(clear=TRUE)
+  if (is.null(ex)) return(ret)
+  else{
+    print(ex)
+    stop("Couldn't get natural mass. Maybe you have not performed aromaticity, atom type or isotope configuration?")
+  }  
 }
 
 
@@ -80,11 +94,33 @@ get.total.charge <- function(molecule) {
       attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
     stop("Must supply an IAtomContainer object")
   }
+
+  ## check to see if we have partial charges
+  atoms <- get.atoms(molecule)
+  pcharges <- unlist(lapply(atoms, get.charge))
+
+  ## If any are null, partial charges were not set, so
+  ## just return the total formal charge
+  if (any(is.null(pcharges))) return(get.total.formal.charge(molecule))
+  else {
+    .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
+           'D',
+           'getTotalCharge',
+           molecule);
+  }
+}
+
+get.total.formal.charge <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')) ||
+      attr(molecule, "jclass") != "org/openscience/cdk/interfaces/IAtomContainer") {
+    stop("Must supply an IAtomContainer object")
+  }
   .jcall('org/openscience/cdk/tools/manipulator/AtomContainerManipulator',
-         'D',
-         'getTotalCharge',
+         'I',
+         'getTotalFormalCharge',
          molecule);
 }
+
 
 convert.implicit.to.explicit <- function(molecule) {
   if (is.null(attr(molecule, 'jclass')) ||
@@ -121,7 +157,9 @@ get.fingerprint <- function(molecule, type = 'standard', depth=6, size=1024) {
            graph = .jnew('org/openscience/cdk/fingerprint/GraphOnlyFingerprinter', size, depth),
            maccs = .jnew('org/openscience/cdk/fingerprint/MACCSFingerprinter'),
            pubchem = .jnew('org/openscience/cdk/fingerprint/PubchemFingerprinter'),
-           estate = .jnew('org/openscience/cdk/fingerprint/EStateFingerprinter'))
+           estate = .jnew('org/openscience/cdk/fingerprint/EStateFingerprinter'),
+           hybridization = .jnew('org/openscience/cdk/fingerprint/HybridizationFingerprinter', size, depth),
+           )
   if (is.null(fingerprinter)) stop("Invalid fingerprint type specified")
   
   bitset <- .jcall(fingerprinter, "Ljava/util/BitSet;", "getFingerprint", molecule)
