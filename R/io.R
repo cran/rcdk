@@ -25,7 +25,7 @@ load.molecules <- function(molfiles=NA, aromaticity = TRUE, typing = TRUE, isoto
   }
 
   for (f in molfiles) {
-    if (!file.exists(f) && !grep('http://', f))
+    if (!file.exists(f) && length(grep('http://', f)) == 0)
       stop(paste(f, ": Does not exist", sep=''))
   }
 
@@ -56,6 +56,9 @@ load.molecules <- function(molfiles=NA, aromaticity = TRUE, typing = TRUE, isoto
 
   if (is.jnull(molecules)) {
     return(NA)
+  }
+  if (length(molecules) == 0) {
+    return(molecules)
   } else {
     nulls <- which( unlist(lapply(molecules, is.jnull)) )
     if (length(nulls) > 0) molecules[nulls] <- NA
