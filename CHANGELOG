@@ -1,3 +1,23 @@
+2012-02-26  Rajarshi Guha  <guhar@niaaa-lptroach.niaaa.nih.gov>
+
+	* inst/doc/rcdk.Rnw: Updated vignette to not evaluate all descriptors for all molecules. 
+	Instead we now hand pick a few descriptors for the example on predictive models
+
+2012-02-23  Rajarshi Guha  <guhar@dk31r9a06lp5a.niddk.nih.gov>
+
+	* man/getfp.Rd: Updated documentation for the new parameters in
+	get.fingerprint and iload.molecules
+
+2012-02-22  Rajarshi Guha  <guhar@Rajarshi-Guha-MacBook-Pro.local>
+
+	* R/rcdk.R (get.fingerprint): Updated to manually check for
+	exceptions and if one occurs optionally print it out (depending on
+	the value of he verbose parameter)
+
+2011-12-13  Rajarshi Guha  <guhar@citdcssgoldi7lt.cit.nih.gov>
+
+	* Updated NAMESPACE to export the .get.desc.value method
+
 2011-11-01  Rajarshi Guha  <guhar@OfficeMac.local>
 	
 	* Convert package to use a namespace
