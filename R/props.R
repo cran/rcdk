@@ -27,6 +27,10 @@ set.property <- function(molecule, key, value) {
 }
 
 get.property <- function(molecule, key) {
+  if (is.jnull(molecule)) {
+    warning("Molecule object was null")
+    return(NA)
+  }
   if (!is.character(key)) {
     stop("The property key must be a character")
   }
@@ -37,16 +41,19 @@ get.property <- function(molecule, key) {
     atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
 
   value <- .jcall('org/guha/rcdk/util/Misc', 'Ljava/lang/Object;', 'getProperty',
-                  molecule, as.character(key))
+                  molecule, as.character(key), check=FALSE)
+  e <- .jgetEx()
+  if (.jcheck(silent=TRUE)) {
+    return(NA)
+  }
+
   if (is.jnull(value)) return(NA)
   else return(.jsimplify(value))
 }
 
 get.properties <- function(molecule) {
   if (!.check.class(molecule, "org/openscience/cdk/interfaces/IAtomContainer") &&
-      !.check.class(molecule, "org/openscience/cdk/AtomContainer") &&
-      !.check.class(molecule, "org/openscience/cdk/Molecule") &&
-      !.check.class(molecule, "org/openscience/cdk/interfaces/IMolecule"))
+      !.check.class(molecule, "org/openscience/cdk/AtomContainer"))
     stop("Must supply an AtomContainer or IAtomContainer object")
   if (.check.class(molecule, "org/openscience/cdk/AtomContainer"))
     atom <- .jcast(molecule, "org/openscience/cdk/interfaces/IAtomContainer")
