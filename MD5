@@ -1,5 +1,5 @@
-d11e611378a5534f32367acdb299f56a *CHANGELOG
-c49a7680ccc2fbc99266e987319b8f20 *DESCRIPTION
+4ff0d430350ab498fe521e43f2308ba2 *CHANGELOG
+24ede3c3c05def473ad576b95dfbf5b7 *DESCRIPTION
 6962c52139288d2a72de63d1379e9f89 *NAMESPACE
 3d5a13e3f50450745d459ca7f5656933 *NEWS
 d21edb87dfea8bedfa6036f2faa68f2c *R/atoms.R
@@ -9,7 +9,7 @@ e6db4398862532422aa6aba335bf0b5d *R/desc.R
 2c39c89490d1c0078b2474f142c3943f *R/frags.R
 5d99116afe4dc06e8f0f4ae5db2581e7 *R/io.R
 b642986ef9ee0dfd9ad685ace9672589 *R/iterating.R
-598c4c827250119e62569066824b7a05 *R/matching.R
+aa37dc2c9d967a436278a4f44c41603e *R/matching.R
 8d3fd8570db7c1ecc9e00df7a15bd74b *R/props.R
 a22c8a984e583380a351c1acc0abdf08 *R/rcdk.R
 804d88eabc1621286b1bfab5800539c2 *R/smiles.R
@@ -21,11 +21,11 @@ a22c8a984e583380a351c1acc0abdf08 *R/rcdk.R
 083aab109c8f4637755a0ee7af7b9469 *inst/cont/rcdk.jar
 2161981b0ce09f96dab17ff45000c01d *inst/doc/auto/rcdk.el
 46f5fa4fcaebfb1c68779fa1987cce19 *inst/doc/rcdk.Rnw
-4735dc9afc92f65edf3b96e62bb6bd69 *inst/doc/rcdk.pdf
+e19947f0936b1f9f3207714e3a92eea8 *inst/doc/rcdk.pdf
 d68b0df8b5914042fb60a6ed424004b2 *inst/unitTests/Makefile
 c0092646b7ecf7e989e68d6cfe51f871 *inst/unitTests/runit.atoms.R
 dbfb5794379be67264c80a5f193a6258 *inst/unitTests/runit.frags.R
-6696fefb6366be59f24958483366658d *inst/unitTests/runit.match.R
+b8b7f11c8bf8ba78cdbbb4c1fdcb604b *inst/unitTests/runit.match.R
 70b5d695488412d2834195dd94369d80 *inst/unitTests/runit.props.R
 2df50e9eb934536bb4a9eb27e2012b9b *inst/unitTests/runit.rcdk.R
 874376073495e82c5691afd2e0a1d32f *inst/unitTests/runit.smiles.R
@@ -59,7 +59,7 @@ ae397ffdbfc796c81464ea9db9756827 *man/getsmilesparser.Rd
 70f66c51b209644791b777cda5eada54 *man/hasNext.Rd
 d7547ec8833bfd0220a6ae061e276459 *man/isvalidformula.Rd
 bd93668d5b4fbffd148ca715ca4cd9ff *man/loadmol.Rd
-0528982ad42c239220fe25565406803a *man/match.Rd
+bb19dcd3141e52442c7669768c3c317e *man/match.Rd
 277fc26426936309d5c5e8dca98bb2ca *man/ops.Rd
 05069028883d9761235dddab4b63db76 *man/parsesmiles.Rd
 356490c725c85d2480ec9126e4b44b5a *man/props.Rd
