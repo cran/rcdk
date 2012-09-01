@@ -1,6 +1,6 @@
 Package: rcdk
-Version: 3.1.9
-Date: 2012-07-05
+Version: 3.1.20.1
+Date: 2012-09-01
 Title: rcdk - Interface to the CDK Libraries
 Author: Rajarshi Guha <rajarshi.guha@gmail.com>
 Maintainer: Rajarshi Guha <rajarshi.guha@gmail.com>
@@ -14,6 +14,6 @@ Description: This package allows the user to access functionality in
         user to load molecules, evaluate fingerprints, calculate
         molecular descriptors and so on.  In addition the CDK API
         allows the user to view structures in 2D.
-Packaged: 2012-07-05 15:52:19 UTC; guhar
+Packaged: 2012-09-01 17:36:57 UTC; guhar
 Repository: CRAN
-Date/Publication: 2012-07-06 12:50:32
+Date/Publication: 2012-09-01 18:06:25

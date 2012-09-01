@@ -1,11 +1,11 @@
-4ff0d430350ab498fe521e43f2308ba2 *CHANGELOG
-24ede3c3c05def473ad576b95dfbf5b7 *DESCRIPTION
+28e1480dbaeff9149fbebd200a455076 *CHANGELOG
+3d0186a4dab8a755f33bcdb749806bd0 *DESCRIPTION
 6962c52139288d2a72de63d1379e9f89 *NAMESPACE
 3d5a13e3f50450745d459ca7f5656933 *NEWS
 d21edb87dfea8bedfa6036f2faa68f2c *R/atoms.R
 2f05877cc5ae67199f25f21e646075e1 *R/bonds.R
 e6db4398862532422aa6aba335bf0b5d *R/desc.R
-9847f58b584e3a763d0293af8a916fed *R/formula.R
+85f71e4d9cd8677c750489f4c940e537 *R/formula.R
 2c39c89490d1c0078b2474f142c3943f *R/frags.R
 5d99116afe4dc06e8f0f4ae5db2581e7 *R/io.R
 b642986ef9ee0dfd9ad685ace9672589 *R/iterating.R
@@ -19,9 +19,8 @@ a22c8a984e583380a351c1acc0abdf08 *R/rcdk.R
 676e1745b81b02de35076f7b4784d104 *inst/CITATION
 326e6cdc7aa3dc6a6aacfcb2289f4d4b *inst/cont/com.objectplanet.image.PngEncoder.jar
 083aab109c8f4637755a0ee7af7b9469 *inst/cont/rcdk.jar
-2161981b0ce09f96dab17ff45000c01d *inst/doc/auto/rcdk.el
 46f5fa4fcaebfb1c68779fa1987cce19 *inst/doc/rcdk.Rnw
-e19947f0936b1f9f3207714e3a92eea8 *inst/doc/rcdk.pdf
+86ff858c9f6eed160c4e50403ef55475 *inst/doc/rcdk.pdf
 d68b0df8b5914042fb60a6ed424004b2 *inst/unitTests/Makefile
 c0092646b7ecf7e989e68d6cfe51f871 *inst/unitTests/runit.atoms.R
 dbfb5794379be67264c80a5f193a6258 *inst/unitTests/runit.frags.R
@@ -71,3 +70,4 @@ ff7301906f2bb2b3b4ea51ba176fd80c *man/setchargeformula.Rd
 207efa3b725450f9e2fdcc11791d49e5 *man/viewtable.Rd
 dc99b056cbc3e4a5a42d6f3a25c34b74 *man/writemols.Rd
 48f8455f7dc13873c32d73018c457730 *tests/doRUnit.R
+46f5fa4fcaebfb1c68779fa1987cce19 *vignettes/rcdk.Rnw
