@@ -1,5 +1,12 @@
 .packageName <- "rcdk"
 
+.get.chem.object.builder <- function() {
+  dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
+                 "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
+                 "getInstance")
+  return(dcob)
+}
+
 .check.class <- function(obj, klass) {
   attr(obj, "jclass") == klass
 }
@@ -134,9 +141,7 @@ convert.implicit.to.explicit <- function(molecule) {
   }
   if (any(is.null(unlist(lapply(get.atoms(molecule), .jcall, returnSig = "Ljava/lang/Integer;", method="getImplicitHydrogenCount"))))) {
     ## add them in
-    dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                   "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
-                   "getInstance")
+    dcob <- .get.chem.object.builder()
     hadder <- .jcall("org/openscience/cdk/tools/CDKHydrogenAdder", "Lorg/openscience/cdk/tools/CDKHydrogenAdder;",
                      "getInstance", dcob)
     .jcall(hadder, "V", "addImplicitHydrogens", molecule)
@@ -200,12 +205,9 @@ do.isotopes <- function(molecule) {
     stop("molecule must be of class IAtomContainer")
   if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
     stop("molecule must be of class IAtomContainer")
-
-  builder <- .jcall(.jnew('org/openscience/cdk/ChemObject'),
-                    'Lorg/openscience/cdk/interfaces/IChemObjectBuilder;', 'getBuilder')
-  ifac <- .jcall('org.openscience.cdk.config.IsotopeFactory',
-                 'Lorg/openscience/cdk/config/IsotopeFactory;',
-                 'getInstance', builder)
+  ifac <- .jcall('org.openscience.cdk.config.Isotopes',
+                 'Lorg/openscience/cdk/config/Isotopes;',
+                 'getInstance')
   .jcall(ifac, 'V', 'configureAtoms', molecule)
 }
 
@@ -263,4 +265,13 @@ get.title <- function(molecule) {
   if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
     stop("molecule must be of class IAtomContainer")
   get.property(molecule, "cdk:Title")
+}
+
+generate.2d.coordinates <- function(molecule) {
+  if (is.null(attr(molecule, 'jclass')))
+    stop("molecule must be of class IAtomContainer")
+  if (attr(molecule, 'jclass') != "org/openscience/cdk/interfaces/IAtomContainer")
+    stop("molecule must be of class IAtomContainer")
+  .jcall('org/guha/rcdk/util/Misc', 'Lorg/openscience/cdk/interfaces/IAtomContainer;',
+         'getMoleculeWithCoordinates', molecule)
 }

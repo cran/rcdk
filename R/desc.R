@@ -1,6 +1,6 @@
 .get.desc.values <- function(dval, nexpected) {
   if (!inherits(dval, "jobjRef")) {
-    if (is.na(dval)) return(NA)
+    if (is.null(dval) || is.na(dval)) return(NA)
   }
 
   if (!is.null(.jcall(dval, "Ljava/lang/Exception;", "getException"))) {
@@ -35,7 +35,6 @@
   if (!(type %in% c('molecular', 'atomic', 'bond'))) {
     stop('type must bond, molecular or atomic')
   }
-  type <- match(type, c('atomic', 'bond', 'molecular'))
   if (type == 'molecular') {
     interface <- J("org.openscience.cdk.qsar.IMolecularDescriptor")
   } else if (type == 'atomic') {
@@ -44,10 +43,7 @@
     interface <- J("org.openscience.cdk.qsar.IBondDescriptor")        
   }
   dklass <- interface@jobj
-  dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                 "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
-                 "getInstance")
-
+  dcob <- .get.chem.object.builder()
   dengine <- .jnew('org/openscience/cdk/qsar/DescriptorEngine', dklass, dcob)
   attr(dengine, 'descType') <- type
   pkg <- c('org.openscience.cdk.qsar.descriptors.atomic',
