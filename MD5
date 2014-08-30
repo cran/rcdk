@@ -1,5 +1,5 @@
 7569adf01638eda2b5dc0183e0f59963 *CHANGELOG
-4d29c2d948b65b8b361e5c5bfcd4f0c8 *DESCRIPTION
+e95f0d34fee2b5d07834665bf18c2a21 *DESCRIPTION
 c7f21cdb98e400ae93e7b89572d4a340 *NAMESPACE
 3d5a13e3f50450745d459ca7f5656933 *NEWS
 c7a617445493a716f4574ed0870da38e *R/atoms.R
@@ -8,7 +8,7 @@ d841f7b07d55cfd729ef20ca0330fa76 *R/desc.R
 82fe7a25900865c4f7cf733c2b64147a *R/fingerprint.R
 373095eea709d8213b9e1e326bbd4b0c *R/formula.R
 2c39c89490d1c0078b2474f142c3943f *R/frags.R
-0fd29647239ff2c4302796b228d71eea *R/io.R
+5d99116afe4dc06e8f0f4ae5db2581e7 *R/io.R
 8c2d6afab84e81095d6b7f4aa71b7336 *R/iterating.R
 9c9455ec2f0f6785a5086d1898b2c5a0 *R/matching.R
 233da8d65f27f653fe40cc09621db531 *R/props.R
@@ -23,17 +23,16 @@ eced0b83387ab22f8e4b78c040ef817f *build/vignette.rds
 faea8712168e85c3ce1b91af7c184458 *inst/cont/rcdk.jar
 b8f9c90835e3ec2b7ba1b0b345edb147 *inst/doc/rcdk.R
 46f5fa4fcaebfb1c68779fa1987cce19 *inst/doc/rcdk.Rnw
-4288d33c52e2d621949a1c6d7f84cc58 *inst/doc/rcdk.pdf
+21465a3237bb4bd36c94c8e38bc169c2 *inst/doc/rcdk.pdf
 d68b0df8b5914042fb60a6ed424004b2 *inst/unitTests/Makefile
 5d1789dc0f3424cb569ed67eb695aa58 *inst/unitTests/runit.atoms.R
 dbfb5794379be67264c80a5f193a6258 *inst/unitTests/runit.frags.R
-fd1744288fd26dbcf0233c19909332d7 *inst/unitTests/runit.inchi.R
 a0daa5672c69848f27544d5d345aaf2d *inst/unitTests/runit.match.R
 70b5d695488412d2834195dd94369d80 *inst/unitTests/runit.props.R
-e1ef62074aa25db961af1546fb2ffb75 *inst/unitTests/runit.rcdk.R
+c955fa0f6cdb657315af9562e40b8a25 *inst/unitTests/runit.rcdk.R
 4fd4724c7c496715f642b73d254eb427 *inst/unitTests/runit.smiles.R
 7de85252099c9057e30628dddbbe17b9 *inst/unitTests/runit.visual.R
-e726ee3c1354772ea93c2d0db51c2aae *java/README
+086315ee8b2ade0bf4e67b34d567425b *java/README
 413484ece5549cf5f2d800555689d920 *man/atomcontainer.Rd
 8218be44092a9b80dea3484563f92c8c *man/atoms.Rd
 57a1ffdefa1103ee8568aa6dc0a33ed3 *man/bpdata.Rd
@@ -53,7 +52,6 @@ d576d044e94fcd729267d01d26566c60 *man/getdescnames.Rd
 f51a9e2c606e7425a1f9fee29aaf22e6 *man/getformula.Rd
 09b68ba9faccdc578f768e946df41a60 *man/getfp.Rd
 2af888d33068bccd27490d06e514e1a1 *man/gethcount.Rd
-490783bbc0800648642ef7cfc3341eff *man/getinchi.Rd
 2aaebbd8bef0a24e8925c0499c779563 *man/getisotopepattern.Rd
 c68d50d6c6b27024016e817af764ba5b *man/getlargestcomp.Rd
 b7003142474268862a59b24cc884f1c4 *man/getmol2formula.Rd
