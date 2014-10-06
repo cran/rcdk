@@ -1,11 +1,11 @@
 7569adf01638eda2b5dc0183e0f59963 *CHANGELOG
-e95f0d34fee2b5d07834665bf18c2a21 *DESCRIPTION
+aeb9b5cca518734fa20da829a7cc4c2b *DESCRIPTION
 c7f21cdb98e400ae93e7b89572d4a340 *NAMESPACE
 3d5a13e3f50450745d459ca7f5656933 *NEWS
 c7a617445493a716f4574ed0870da38e *R/atoms.R
 2f05877cc5ae67199f25f21e646075e1 *R/bonds.R
 d841f7b07d55cfd729ef20ca0330fa76 *R/desc.R
-82fe7a25900865c4f7cf733c2b64147a *R/fingerprint.R
+1cfd5b5d59c38b3f483c3d31e105a60c *R/fingerprint.R
 373095eea709d8213b9e1e326bbd4b0c *R/formula.R
 2c39c89490d1c0078b2474f142c3943f *R/frags.R
 5d99116afe4dc06e8f0f4ae5db2581e7 *R/io.R
@@ -23,7 +23,7 @@ eced0b83387ab22f8e4b78c040ef817f *build/vignette.rds
 faea8712168e85c3ce1b91af7c184458 *inst/cont/rcdk.jar
 b8f9c90835e3ec2b7ba1b0b345edb147 *inst/doc/rcdk.R
 46f5fa4fcaebfb1c68779fa1987cce19 *inst/doc/rcdk.Rnw
-21465a3237bb4bd36c94c8e38bc169c2 *inst/doc/rcdk.pdf
+38a4b3fd6e8c13b58efb7839a28ae347 *inst/doc/rcdk.pdf
 d68b0df8b5914042fb60a6ed424004b2 *inst/unitTests/Makefile
 5d1789dc0f3424cb569ed67eb695aa58 *inst/unitTests/runit.atoms.R
 dbfb5794379be67264c80a5f193a6258 *inst/unitTests/runit.frags.R
@@ -50,7 +50,7 @@ b1598bb517813687c68e0f8aebb1cf17 *man/getconatom.Rd
 e48edb9cc35936533d179c0ed5a0fb06 *man/getdesccat.Rd
 d576d044e94fcd729267d01d26566c60 *man/getdescnames.Rd
 f51a9e2c606e7425a1f9fee29aaf22e6 *man/getformula.Rd
-09b68ba9faccdc578f768e946df41a60 *man/getfp.Rd
+413d6e3f5378e2ff04e77c0b26f4899e *man/getfp.Rd
 2af888d33068bccd27490d06e514e1a1 *man/gethcount.Rd
 2aaebbd8bef0a24e8925c0499c779563 *man/getisotopepattern.Rd
 c68d50d6c6b27024016e817af764ba5b *man/getlargestcomp.Rd
