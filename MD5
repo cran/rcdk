@@ -1,10 +1,10 @@
 7569adf01638eda2b5dc0183e0f59963 *CHANGELOG
-aeb9b5cca518734fa20da829a7cc4c2b *DESCRIPTION
+c066d70c7941fa7c5346d031037788cf *DESCRIPTION
 c7f21cdb98e400ae93e7b89572d4a340 *NAMESPACE
 3d5a13e3f50450745d459ca7f5656933 *NEWS
 c7a617445493a716f4574ed0870da38e *R/atoms.R
 2f05877cc5ae67199f25f21e646075e1 *R/bonds.R
-d841f7b07d55cfd729ef20ca0330fa76 *R/desc.R
+c63673a5df62455389b59b97d6c6ad05 *R/desc.R
 1cfd5b5d59c38b3f483c3d31e105a60c *R/fingerprint.R
 373095eea709d8213b9e1e326bbd4b0c *R/formula.R
 2c39c89490d1c0078b2474f142c3943f *R/frags.R
@@ -23,7 +23,7 @@ eced0b83387ab22f8e4b78c040ef817f *build/vignette.rds
 faea8712168e85c3ce1b91af7c184458 *inst/cont/rcdk.jar
 b8f9c90835e3ec2b7ba1b0b345edb147 *inst/doc/rcdk.R
 46f5fa4fcaebfb1c68779fa1987cce19 *inst/doc/rcdk.Rnw
-38a4b3fd6e8c13b58efb7839a28ae347 *inst/doc/rcdk.pdf
+0b148982282f558a4d33bff953660f11 *inst/doc/rcdk.pdf
 d68b0df8b5914042fb60a6ed424004b2 *inst/unitTests/Makefile
 5d1789dc0f3424cb569ed67eb695aa58 *inst/unitTests/runit.atoms.R
 dbfb5794379be67264c80a5f193a6258 *inst/unitTests/runit.frags.R
