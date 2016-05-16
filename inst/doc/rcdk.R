@@ -179,13 +179,13 @@ dc
 ###################################################
 ### code chunk number 24: rcdk.Rnw:339-340
 ###################################################
-dn <- get.desc.names(dc[1])
+dn <- get.desc.names(dc[4])
 
 
 ###################################################
 ### code chunk number 25: rcdk.Rnw:348-350
 ###################################################
-aDesc <- eval.desc(mol, dn[1])
+aDesc <- eval.desc(mol, dn[4])
 allDescs <- eval.desc(mol, dn)
 
 
