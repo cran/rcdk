@@ -261,7 +261,7 @@ fp <- get.fingerprint(mols[[1]], type='maccs')
 ###################################################
 mols <- parse.smiles(bpdata[1:50,1]) 
 fps <- lapply(mols, get.fingerprint, type='extended') 
-fp.sim <- fp.sim.matrix(fps, method='tanimoto') 
+fp.sim <- fingerprint::fp.sim.matrix(fps, method='tanimoto') 
 fp.dist <- 1 - fp.sim 
 
 
@@ -280,7 +280,7 @@ target.mols <- parse.smiles(bpdata[,1])
 query.fp <- get.fingerprint(query.mol, type='maccs')
 target.fps <- lapply(target.mols, get.fingerprint, type='maccs')
 sims <- unlist(lapply(target.fps, 
-                      distance, 
+                      fingerprint::distance, 
                       fp2=query.fp, method='tanimoto'))
 hits <- which(sims > 0.3)
 
