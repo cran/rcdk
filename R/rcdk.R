@@ -37,8 +37,8 @@
   
   #check Java Version 
   jversion <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
-  jversionmajor <- as.numeric(paste0(strsplit(jversion, "\\.")[[1]][1], collapse = "."))
-  try(jversionminor <- as.numeric(paste0(strsplit(jversion, "\\.")[[1]][2], collapse = ".")))
+  jversionmajor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][1], collapse = "."))
+  try(jversionminor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][2], collapse = ".")))
   isjavagood <- jversionmajor >=7 || (jversionmajor==1 && jversionminor >= 7)
   
   if (isjavagood == FALSE) { stop("
@@ -58,6 +58,17 @@ Then you will need to re-install rJava.
 =================
 =================")  
   }
+
+  ## generate some Java objects which get reused, so as to avoid repeated .jnew()
+  nRule <- .jnew("org/openscience/cdk/formula/rules/NitrogenRule");
+  rdbeRule <- .jnew("org/openscience/cdk/formula/rules/RDBERule");
+  assign(".rcdk.GlobalEnv", new.env(parent = emptyenv()), envir = topenv())
+  assign("nRule", nRule, envir = .rcdk.GlobalEnv)
+  assign("rdbeRule", rdbeRule, envir = .rcdk.GlobalEnv)
+  assign("dcob", .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
+                        "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
+                        "getInstance"), envir = .rcdk.GlobalEnv)
+  assign("mfManipulator", .jnew("org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator"), envir = .rcdk.GlobalEnv)
 }
 
 cdk.version <- function() {

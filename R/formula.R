@@ -19,7 +19,7 @@ setClass("cdkFormula", representation(mass = "numeric",
 
 get.formula <- function(mf, charge=0) {
   
-  manipulator <- .jnew("org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator");
+  manipulator <- get("mfManipulator", envir = .rcdk.GlobalEnv)
   if(!is.character(mf)) {
     stop("Must supply a Formula string");
   }else{
@@ -96,28 +96,28 @@ set.charge.formula <- function(formula,charge = -1) {
 ##  Validate a cdkFormula.
 ########################################################
 
+
 isvalid.formula <- function(formula,rule=c("nitrogen","RDBE")){
   
   if (class(formula) != "cdkFormula")
     stop("Supplied object should be a cdkFormula Class")
   
   molecularFormula <- formula@objectJ;
-  
+
+  nRule <- get("nRule", envir = .rcdk.GlobalEnv)
+  rdbeRule <- get("rdbeRule", envir = .rcdk.GlobalEnv)
+
   for(i in 1:length(rule)){
     ##Nitrogen Rule
     if(rule[i] == "nitrogen"){
-      nRule <- .jnew("org/openscience/cdk/formula/rules/NitrogenRule");
       valid <- .jcall(nRule,"D","validate",molecularFormula);
-      
       if(valid != 1.0){
         return (FALSE)
       }
     }	  
     ##RDBE Rule
     if(rule[i] == "RDBE"){
-      rdbeRule <- .jnew("org/openscience/cdk/formula/rules/RDBERule");
       valid <- .jcall(rdbeRule,"D","validate",molecularFormula);
-      
       if(valid != 1.0){
         return (FALSE)
       }
@@ -160,6 +160,62 @@ get.isotopes.pattern <- function(formula,minAbund=0.1){
 ##  Generate a list of possible formula objects given a mass and 
 ##  a mass tolerance.
 ########################################################
+
+generate.formula.iter <- function(mass, window = 0.01,
+                              elements = list(
+                                C=c(0,50),
+                                H=c(0,50),
+                                N=c(0,50),
+                                O=c(0,50),
+                                S=c(0,50)),
+                              validation = FALSE,
+                              charge = 0.0,
+                              as.string=TRUE) {
+  ## Construct range strings
+  rstrs <- sapply(names(elements), function(x) paste0(c(x, elements[[x]][1], elements[[x]][2]), sep='', collapse=' '))
+  if (length(rstrs) == 0)
+    warning("The element specification resulted in a 0 length vector. This is worrisome")
+  
+  ## Get MF range object
+  mfRange <- .jcall("org/guha/rcdk/util/Misc",
+                    "Lorg/openscience/cdk/formula/MolecularFormulaRange;",
+                    "getMFRange",
+                    .jarray(rstrs))
+  ## construct generator
+  mfgen <- .jnew("org/openscience/cdk/formula/RoundRobinFormulaGenerator",
+                 get("dcob", envir = .rcdk.GlobalEnv),
+                 as.double(mass-window),
+                 as.double(mass+window),
+                 mfRange)
+
+  hasNext <- NA
+  formula <- NA
+  
+  ## hasNx <- function() {
+  ##   hasNext <<- .jcall(mfgen, "Lorg/openscience/cdk/interfaces/IMolecularFormula;", "getNextFormula")
+  ##   if (is.jnull(hasNext)) {
+  ##     ## nothing to do
+  ##     formula <<- NA
+  ##   } else formula <<- hasNext
+  ##   return(!is.jnull(hasNext))
+  ## }
+  
+  nextEl <- function() {
+    hasNext <<- NA
+    formula <- .jcall(mfgen, "Lorg/openscience/cdk/interfaces/IMolecularFormula;", "getNextFormula")
+    if (is.jnull(formula)) stop("StopIteration")
+    if (!as.string) {
+      return(formula)
+    } else {
+      return(.jcall("org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator", "S", "getString", formula))
+    }
+  }
+
+  ##obj <- list(nextElem = nextEl, hasNext = hasNx)
+  obj <- list(nextElem = nextEl)  
+  class(obj) <- c("generate.formula2", "abstractiter", "iter")
+  return(obj)
+}
 
 generate.formula <- function(mass, window=0.01, 
                              elements=list(c("C",0,50),c("H",0,50),c("N",0,50),c("O",0,50),c("S",0,50)), 
@@ -251,11 +307,13 @@ generate.formula <- function(mass, window=0.01,
 #############################################################
 
 .cdkFormula.createChemObject <- function(){
-  dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
-                 "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
-                 "getInstance")
-  dcob
+  get("dcob", envir = .rcdk.GlobalEnv)
+#  dcob <- .jcall("org/openscience/cdk/DefaultChemObjectBuilder",
+#                 "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
+#                 "getInstance")
+#  dcob
 }
+
 .cdkFormula.createFormulaObject <- function(){
 ##   dcob <- .cdkFormula.createChemObject()
 ##   klass <- J("org.openscience.cdk.interfaces.IMolecularFormula")$class
@@ -303,7 +361,7 @@ generate.formula <- function(mass, window=0.01,
   }
   
   object@string <- .cdkFormula.getString(molecularformula);
-  manipulator <- .jnew("org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator");
+  manipulator <- get("mfManipulator", envir = .rcdk.GlobalEnv)
   cMass <- .jcall(manipulator,"D","getTotalExactMass",molecularformula);
   object@mass <- cMass;
   chargeDO <- .jcall(molecularformula,"Ljava/lang/Integer;","getCharge");
