@@ -36,11 +36,15 @@
   .jinit(classpath=c(jar.rcdk,jar.png))
   
   #check Java Version 
-  jversion <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
-  jversionmajor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][1], collapse = "."))
-  try(jversionminor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][2], collapse = ".")))
-  isjavagood <- jversionmajor >=8 || (jversionmajor==1 && jversionminor >= 8)
-  
+##  jversion <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
+##  jversionmajor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][1], collapse = "."))
+##  try(jversionminor <- as.numeric(paste0(strsplit(jversion, "(\\.|\\+)")[[1]][2], collapse = ".")))
+##  isjavagood <- jversionmajor >=8 || (jversionmajor==1 && jversionminor >= 8)
+
+  jv <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
+  isjavagood <- if(substr(jv, 1L, 2L) == "1.") {
+      as.numeric(paste0(strsplit(jv, "[.]")[[1L]][1:2], collapse = ".")) >= 1.8
+  } else TRUE 
   if (isjavagood == FALSE) { stop("
 =================
 =================
