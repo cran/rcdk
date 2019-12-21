@@ -1,5 +1,5 @@
 Package: rcdk
-Version: 3.4.7.1
+Version: 3.4.7.2
 Date: 2018-04-29
 Title: Interface to the 'CDK' Libraries
 Authors@R: c(person('Rajarshi', 'Guha', role=c('aut',"cph"), email='rajarshi.guha@gmail.com'),
@@ -18,13 +18,13 @@ Description: Allows the user to access functionality in the
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-09-25 10:11:39 UTC; ripley
+Packaged: 2019-12-21 11:07:47 UTC; hornik
 Author: Rajarshi Guha [aut, cph],
   Zachary Charlop-Powers [cre],
   Emma Schymanski [ctb]
 Maintainer: ORPHANED
 Repository: CRAN
-Date/Publication: 2018-09-26 05:01:07 UTC
+Date/Publication: 2019-12-21 11:25:34 UTC
 X-CRAN-Original-Maintainer: Zachary Charlop-Powers
         <zach.charlop.powers@gmail.com>
 X-CRAN-Comment: Orphaned and corrected on 2018-09-26 as issues with
