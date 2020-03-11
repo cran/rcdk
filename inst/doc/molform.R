@@ -36,7 +36,7 @@ isvalid.formula(formula,rule=c("nitrogen","RDBE"))
 
 ## ----warn=FALSE---------------------------------------------------------------
 mit <- generate.formula.iter(100, charge=0, window=0.1,
-                             elements=list(C=c(0,50), H=c(0,50), N=c(0,50)))
+                             elements=list(c("C",0,50), c("H",0,50), c("N",0,50)))
 hit <- itertools::ihasNext(mit)
 while (itertools::hasNext(hit)) 
     print(iterators::nextElem(hit))

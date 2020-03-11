@@ -1,6 +1,9 @@
 ## -----------------------------------------------------------------------------
 library(rcdk)
 
+## -----------------------------------------------------------------------------
+cdk.version()
+
 ## ----echo=FALSE---------------------------------------------------------------
 data(bpdata)
 str(bpdata)
@@ -51,6 +54,7 @@ get.smiles(mols[[3]], smiles.flavors(c('Generic','CxSmiles')))
 ## -----------------------------------------------------------------------------
 m <- parse.smiles('CCC')[[1]]
 m <- generate.2d.coordinates(m)
+m
 get.smiles(m, smiles.flavors(c('CxSmiles')))
 get.smiles(m, smiles.flavors(c('CxCoordinates')))
 

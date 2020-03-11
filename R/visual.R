@@ -45,6 +45,23 @@
 ##   }
 ## }
 
+#' get.depictor
+#' 
+#' return an RcdkDepictor.
+#' 
+#' @param width Default. \code{200}
+#' @param height Default. \code{200}
+#' @param zoom Default. \code{1.3}
+#' @param style Default. \code{cow}
+#' @param annotate Default. \code{off}
+#' @param abbr Default. \code{on}
+#' @param suppressh Default. \code{TRUE}
+#' @param showTitle Default. \code{FALSE}
+#' @param smaLimit Default. \code{100}
+#' @param sma Default. \code{NULL}
+#' 
+#' @export
+#' 
 get.depictor <- function(width = 200, height = 200, zoom = 1.3, style = "cow", annotate = "off", abbr = "on",
                          suppressh = TRUE, showTitle = FALSE, smaLimit = 100, sma = NULL) {
   if (is.null(sma)) sma <- ""
@@ -61,6 +78,19 @@ get.depictor <- function(width = 200, height = 200, zoom = 1.3, style = "cow", a
                as.character(sma)))
 }
 
+#' view.molecule.2d
+#' 
+#' Create a 2D depiction of a molecule. If there are more than
+#' one molecules supplied, return a grid woth \code{ncol} columns,.
+#' 
+#' @param molecule The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
+#' @param ncol Default \code{4}
+#' @param width Default \code{200}
+#' @param height Default \code{200}
+#' @param depictor Default \code{NULL}
+#' 
+#' @importFrom utils write.table
+#' @export 
 view.molecule.2d <- function(molecule, ncol = 4, width = 200, height = 200, depictor = NULL) {
   
   if (class(molecule) != 'character' &&
@@ -140,12 +170,7 @@ view.molecule.2d <- function(molecule, ncol = 4, width = 200, height = 200, depi
   }
 }
 
-view.table <- function(molecules, dat, cellx = 200, celly = 200) {
-##  stop("Currently disabled")
-
-  if (cellx <= 0 || celly <= 0) {
-    stop("Invalid cell width or height specified")
-  }
+view.table <- function(molecules, dat, depictor = NULL) {
 
   if (!is.list(molecules)) {
     stop("Must provide a list of molecule objects")
@@ -159,6 +184,9 @@ view.table <- function(molecules, dat, cellx = 200, celly = 200) {
     stop("The number of rows in datatable must be the same as the number of molecules")
   }
 
+  if (is.null(depictor))
+    depictor <- get.depictor()
+  
   if (is.null(names(dat))) cnames <- c('Molecule', paste('V',1:ncol(dat)), sep='')
   else cnames <- c('Molecule', names(dat))
 
@@ -187,14 +215,17 @@ view.table <- function(molecules, dat, cellx = 200, celly = 200) {
   ## now make our object table
   xval.arr <- .jarray(rows, "[Ljava/lang/Object;")
   obj <- .jnew("org/guha/rcdk/view/ViewMolecule2DDataTable",
-               molecules, carr, xval.arr)
-  .jcall(obj, "V", "setCellX", as.integer(cellx))
-  .jcall(obj, "V", "setCellY", as.integer(celly))
+               molecules, carr, xval.arr, depictor)
   .jcall(obj, "V", "display")
 }
 
 
-
+#' view.image.2d
+#' 
+#' @param molecule The molecule to display Should be a `jobjRef` representing an `IAtomContainer`
+#' @param depictor Default \code{NULL}
+#' 
+#' @export
 view.image.2d <- function(molecule, depictor = NULL) {
   if (is.null(depictor))
     depictor <- get.depictor()
@@ -205,6 +236,14 @@ view.image.2d <- function(molecule, depictor = NULL) {
   return(readPNG(bytes))
 }
 
+#' copy.image.to.clipboard
+#' 
+#' generate an image and make it available to the system
+#' clipboard.
+#' 
+#' @param molecule The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
+#' @param depictor Optional. Default \code{NULL}. Depictor from \code{get.depictor}
+#' @export
 copy.image.to.clipboard <-  function(molecule, depictor = NULL) {
   if (is.null(depictor))
     depictor <- get.depictor()
