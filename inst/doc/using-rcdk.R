@@ -73,8 +73,8 @@ get.smiles(m, smiles.flavors(c('CxCoordinates')))
 ## ----eval=FALSE---------------------------------------------------------------
 #  depictor <- get.depictor(style='cob', abbr='reagents', width=300, height=300)
 #  view.molecule.2d(mols[[5]], depictor=depictor)
-#  depictor$setStyle('cow')
-#  view.molecule.2d(mols[[5]], depictor=depictor)
+#  #depictor$setStyle('cow')
+#  #view.molecule.2d(mols[[5]], depictor=depictor)
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  depictor <- get.depictor(style='cob', abbr='reagents', sma='N(C)(C)')

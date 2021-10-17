@@ -1,3 +1,31 @@
+2021-10-14
+   * Fix code to handle changes to JDK17. Notably, I needed to reduce the use of the J notation in a nubmer of places in favor of direct calls.
+   * formally deprecated `do.typing` in favor of `set.atom.types`
+   
+   
+2020-12-21 Rajarshi Guha
+
+  * Updated handling of atomic descriptors to resolve a name mismatch bug
+  
+  * Added a test case for atomic descriptors (thanks to Francesca Di Cesare)
+  
+2020-09-23 Rajarshi Guha
+
+  * Updated @export annotation with function name to avoid interpretation as 
+  S3 method
+  
+  * Refactored do.typing to set.atom.types and updated to use J notation
+  
+  * Refactored methods to use the renamed function
+  
+2020-03-15 Rajarshi Guha
+
+  * Generate bond order enums and store in rcdk package env
+  
+  * Add a method to retrieve bond order enums
+  
+  * Add unit tests
+  
 2013-10-30  Guha  <guhar@HG-01881061-LM8.local>
 
 	* R/fingerprint.R (get.fingerprint): Updated to ensure we call

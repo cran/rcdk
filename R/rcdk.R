@@ -10,11 +10,11 @@
 #' a builder object when directly working with the CDK API via
 #' `rJava`.
 #' 
-#' This method returns an instance of the \href{http://cdk.github.io/cdk/2.2/docs/api/org/openscience/cdk/silent/SilentChemObjectBuilder.html}{SilentChemObjectBuilder}. 
+#' This method returns an instance of the \href{https://cdk.github.io/cdk/2.5/docs/api/org/openscience/cdk/silent/SilentChemObjectBuilder.html}{SilentChemObjectBuilder}. 
 #' Note that this is a static object that is created at package load time, 
 #' and the same instance is returned whenever this function is called.
 #' 
-#' @return An instance of \href{http://cdk.github.io/cdk/2.3/docs/api/org/openscience/cdk/silent/SilentChemObjectBuilder.html}{SilentChemObjectBuilder}
+#' @return An instance of \href{https://cdk.github.io/cdk/2.5/docs/api/org/openscience/cdk/silent/SilentChemObjectBuilder.html}{SilentChemObjectBuilder}
 #' @export
 #' @author Rajarshi Guha (\email{rajarshi.guha@@gmail.com})
 get.chem.object.builder <- function() {
@@ -54,9 +54,13 @@ get.chem.object.builder <- function() {
     Sys.setenv("DYLD_LIBRARY_PATH"=sub("/usr/X11R6/lib","",dlp))
   }
 
+  Sys.setenv(NOAWT=1)
+  
   jar.rcdk <- paste(lib,pkg,"cont","rcdk.jar",sep=.Platform$file.sep)
   jar.png <- paste(lib,pkg,"cont","com.objectplanet.image.PngEncoder.jar",sep=.Platform$file.sep)
-  .jinit(classpath=c(jar.rcdk,jar.png))
+  .jinit(classpath=c(jar.rcdk,jar.png), parameters="-Djava.awt.headless=true")
+  
+  .jcall("java/lang/System", "S", "setProperty", "java.awt.headless", "true")
   
   # check Java Version 
   jv <- .jcall("java/lang/System", "S", "getProperty", "java.runtime.version")
@@ -75,6 +79,23 @@ get.chem.object.builder <- function() {
                         "Lorg/openscience/cdk/interfaces/IChemObjectBuilder;",
                         "getInstance"), envir = .rcdk.GlobalEnv)
   assign("mfManipulator", .jnew("org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator"), envir = .rcdk.GlobalEnv)
+  
+  # Extract the bond order enums so we can return them without going through
+  # Java each time we want one
+  assign("BOND_ORDER_SINGLE", J("org.openscience.cdk.interfaces.IBond")$Order$SINGLE,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_DOUBLE", J("org.openscience.cdk.interfaces.IBond")$Order$DOUBLE,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_TRIPLE", J("org.openscience.cdk.interfaces.IBond")$Order$TRIPLE,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_UNSET", J("org.openscience.cdk.interfaces.IBond")$Order$UNSET,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_QUADRUPLE", J("org.openscience.cdk.interfaces.IBond")$Order$QUADRUPLE,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_QUINTUPLE", J("org.openscience.cdk.interfaces.IBond")$Order$QUINTUPLE,
+         envir = .rcdk.GlobalEnv)
+  assign("BOND_ORDER_SEXTUPLE", J("org.openscience.cdk.interfaces.IBond")$Order$SEXTUPLE,
+         envir = .rcdk.GlobalEnv)
 }
 
 #' Get the current CDK version used in the package.
@@ -227,7 +248,7 @@ get.total.formal.charge <- function(mol) {
 #' Ensure that the molecule has been typed beforehand.
 #' 
 #' @param mol The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
-#' @seealso \code{\link{get.hydrogen.count}}, \code{\link{remove.hydrogens}}, \code{\link{do.typing}}
+#' @seealso \code{\link{get.hydrogen.count}}, \code{\link{remove.hydrogens}}, \code{\link{set.atom.types}}
 #' @export
 #' @author Rajarshi Guha (\email{rajarshi.guha@@gmail.com})
 convert.implicit.to.explicit <- function(mol) {
@@ -292,7 +313,7 @@ get.bonds <- function(mol) {
 #' detect aromaticity of an input compound
 #' 
 #' @param mol The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
-#' @export
+#' @export do.aromaticity
 do.aromaticity <- function(mol) {
   if (!.check.class(mol, "org/openscience/cdk/interfaces/IAtomContainer"))
     stop("molecule must be of class IAtomContainer")
@@ -314,26 +335,12 @@ do.aromaticity <- function(mol) {
   .jcall(aromaticity, "Z", "apply", mol)
 }
 
-#' do.typing
-#' 
-#' configure atom typings.
-#' 
-#' @param mol The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
-#' @export
-do.typing <- function(mol) {
-  if (!.check.class(mol, "org/openscience/cdk/interfaces/IAtomContainer"))
-    stop("molecule must be of class IAtomContainer")
-  
-  .jcall("org.openscience.cdk.tools.manipulator.AtomContainerManipulator",
-         "V", "percieveAtomTypesAndConfigureAtoms", mol)
-}
-
 #' do.isotopes
 #' 
 #' configure isotopes
 #' 
 #' @param mol The molecule to query. Should be a `jobjRef` representing an `IAtomContainer`
-#' @export
+#' @export do.isotopes
 do.isotopes <- function(mol) {
   if (!.check.class(mol, "org/openscience/cdk/interfaces/IAtomContainer"))
     stop("molecule must be of class IAtomContainer")

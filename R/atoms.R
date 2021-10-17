@@ -38,6 +38,7 @@
 #' is.aromatic(atom)
 #' is.aliphatic(atom)
 #' is.in.ring(atom) 
+#' set.atom.types(mol)
 #' 
 #' 
 #' @section Arguments:
@@ -68,6 +69,28 @@ NULL
   if (.check.class(atom, "org/openscience/cdk/Atom"))
     atom <- .jcast(atom, "org/openscience/cdk/interfaces/IAtom")
   return(atom)
+}
+
+#' @name set.atom.types
+#' @title Set the CDK atom types for all atoms in the molecule
+#' 
+#' Calling this method will overwrite any pre-existing type information. 
+#' Currently there is no way to choose other atom typing schemes
+#' 
+#' @param mol The molecule whose atoms should be typed
+#' @return Nothing is returned, the molecule is modified in place
+#' @export
+#' @author Rajarshi Guha (\email{rajarshi.guha@@gmail.com})
+set.atom.types <- function(mol) {
+  
+    if (!.check.class(mol, "org/openscience/cdk/interfaces/IAtomContainer"))
+      stop("molecule must be of class IAtomContainer")
+    
+    .jcall("org.openscience.cdk.tools.manipulator.AtomContainerManipulator",
+           "V", "percieveAtomTypesAndConfigureAtoms", mol)
+    
+  # acm <- J("org.openscience.cdk.tools.manipulator.AtomContainerManipulator")
+  # acm$percieveAtomTypesAndConfigureAtoms(mol)  
 }
 
 #' @name get.point3d

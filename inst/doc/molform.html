@@ -1,319 +1,208 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Rajarshi Guha" />
+
+<meta name="date" content="2021-10-14" />
 
 <title>Handling Molecular Formulae</title>
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
   }
-};
-</script>
-
-<!-- Styles for R syntax highlighter -->
-<style type="text/css">
-   pre .operator,
-   pre .paren {
-     color: rgb(104, 118, 135)
-   }
-
-   pre .literal {
-     color: #990073
-   }
-
-   pre .number {
-     color: #099;
-   }
-
-   pre .comment {
-     color: #998;
-     font-style: italic
-   }
-
-   pre .keyword {
-     color: #900;
-     font-weight: bold
-   }
-
-   pre .identifier {
-     color: rgb(0, 0, 0);
-   }
-
-   pre .string {
-     color: #d14;
-   }
+  .sourceCode {
+    overflow: visible;
+  }
 </style>
-
-<!-- R syntax highlighter -->
-<script type="text/javascript">
-var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
-hljs.initHighlightingOnLoad();
-</script>
-
-<!-- MathJax scripts -->
-<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
-}
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
-}
-
-h1 {
-   font-size:2.2em;
-}
-
-h2 {
-   font-size:1.8em;
-}
-
-h3 {
-   font-size:1.4em;
-}
-
-h4 {
-   font-size:1.0em;
-}
-
-h5 {
-   font-size:0.9em;
-}
-
-h6 {
-   font-size:0.8em;
-}
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
-}
-
-pre, img {
-  max-width: 100%;
-}
-pre {
-  overflow-x: auto;
-}
-pre code {
-   display: block; padding: 0.5em;
-}
-
-code {
-  font-size: 92%;
-  border: 1px solid #ccc;
-}
-
-code[class] {
-  background-color: #F8F8F8;
-}
-
-table, td, th {
-  border: none;
-}
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
-}
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
-}
-
 @media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
 
 
 
 </head>
 
 <body>
+
+
+
+
+<h1 class="title toc-ignore">Handling Molecular Formulae</h1>
+<h4 class="author">Rajarshi Guha</h4>
+<h4 class="date">2021-10-14</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#handling-molecular-formulae">Handling Molecular Formulae</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#parsing-a-molecule-to-a-molecular-formula">Parsing a Molecule To a Molecular Formula</a></li>
+<li><a href="#initializing-a-formula-from-the-symbol-expression">Initializing a Formula from the Symbol Expression</a></li>
+<li><a href="#generating-molecular-formula">Generating Molecular Formula</a></li>
+<li><a href="#calculating-isotope-pattern">Calculating Isotope Pattern</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="handling-molecular-formulae" class="section level1">
 <h1>Handling Molecular Formulae</h1>
-
+<div id="introduction" class="section level2">
 <h2>Introduction</h2>
-
-<p>The molecular formula is the simplest way to characterize a molecular compound.
-It specifies the actual number of atoms of each element contained
-in the molecule. A molecular formula is represented by the chemical symbol
-of each constituent element. If a molecule contains more than one atom for
-a particular element, the quantity is shown as subscript after the chemical
-symbol. Otherwise, the number of neutrons (atomic mass) that an atom is
-composed can differ. This different type of atoms are known as isotopes. The
-number of nuclei is represented as superscripted prefix previous to the chemical
-element. Generally it is not added when the isotope that characterizes
-the element is the most occurrence in nature, e.g., \(C_4H_{11}O^2D\).</p>
-
+<p>The molecular formula is the simplest way to characterize a molecular compound. It specifies the actual number of atoms of each element contained in the molecule. A molecular formula is represented by the chemical symbol of each constituent element. If a molecule contains more than one atom for a particular element, the quantity is shown as subscript after the chemical symbol. Otherwise, the number of neutrons (atomic mass) that an atom is composed can differ. This different type of atoms are known as isotopes. The number of nuclei is represented as superscripted prefix previous to the chemical element. Generally it is not added when the isotope that characterizes the element is the most occurrence in nature, e.g., <span class="math inline">\(C_4H_{11}O^2D\)</span>.</p>
+</div>
+<div id="parsing-a-molecule-to-a-molecular-formula" class="section level2">
 <h2>Parsing a Molecule To a Molecular Formula</h2>
-
-<p>Front a molecule, defined as conjunct of atoms helding together by chemical
-bonds, we can simplify it taking only the information about the atoms. The <code>rcdk</code>
-package provides a parser to translate molecules to molecular formlulas, the
-<code>get.mol2formula</code> function.</p>
-
-<pre><code class="r">library(rcdk)
-</code></pre>
-
-<pre><code>## Loading required package: rcdklibs
-</code></pre>
-
-<pre><code>## Loading required package: rJava
-</code></pre>
-
-<pre><code class="r">sp &lt;- get.smiles.parser()
-molecule &lt;- parse.smiles(&#39;N&#39;)[[1]]
-convert.implicit.to.explicit(molecule)
-formula &lt;- get.mol2formula(molecule,charge=0)
-</code></pre>
-
-<p>Note that the above formula object is a <code>CDKFormula-class</code>. This class
-contains some attributes that defines a molecular formula. For example,
-the mass, the charge, the isotopes, the character representation of the
-molecular formula and the <a href="https://cdk.github.io/cdk/2.3/docs/api/org/openscience/cdk/interfaces/IMolecularFormula.html">IMolecularFormula</a> <code>jobjRef</code> object.</p>
-
+<p>Front a molecule, defined as conjunct of atoms helding together by chemical bonds, we can simplify it taking only the information about the atoms. The <code>rcdk</code> package provides a parser to translate molecules to molecular formlulas, the <code>get.mol2formula</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rcdk)</span></code></pre></div>
+<pre><code>## Loading required package: rcdklibs</code></pre>
+<pre><code>## Loading required package: rJava</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sp <span class="ot">&lt;-</span> <span class="fu">get.smiles.parser</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>molecule <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;N&#39;</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">convert.implicit.to.explicit</span>(molecule)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">get.mol2formula</span>(molecule,<span class="at">charge=</span><span class="dv">0</span>)</span></code></pre></div>
+<p>Note that the above formula object is a <code>CDKFormula-class</code>. This class contains some attributes that defines a molecular formula. For example, the mass, the charge, the isotopes, the character representation of the molecular formula and the <a href="https://cdk.github.io/cdk/2.3/docs/api/org/openscience/cdk/interfaces/IMolecularFormula.html">IMolecularFormula</a> <code>jobjRef</code> object.</p>
 <p>The molecular mass, charge and string representation for this formula are given by</p>
-
-<pre><code class="r">formula@mass
-</code></pre>
-
-<pre><code>## [1] 17.02655
-</code></pre>
-
-<pre><code class="r">formula@charge
-</code></pre>
-
-<pre><code>## [1] 0
-</code></pre>
-
-<pre><code class="r">formula@string
-</code></pre>
-
-<pre><code>## [1] &quot;H3N&quot;
-</code></pre>
-
-<p>The isotopes for this formula. It is formed from  three attributes. <code>isoto</code> (the
-symbol expression of the isotope), <code>number</code> (number of atoms for this isotope)
-and <code>mass</code> (exact mass of this isotope).</p>
-
-<pre><code class="r">formula@isotopes
-</code></pre>
-
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>formula<span class="sc">@</span>mass</span></code></pre></div>
+<pre><code>## [1] 17.02655</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>formula<span class="sc">@</span>charge</span></code></pre></div>
+<pre><code>## [1] 0</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>formula<span class="sc">@</span>string</span></code></pre></div>
+<pre><code>## [1] &quot;H3N&quot;</code></pre>
+<p>The isotopes for this formula. It is formed from three attributes. <code>isoto</code> (the symbol expression of the isotope), <code>number</code> (number of atoms for this isotope) and <code>mass</code> (exact mass of this isotope).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>formula<span class="sc">@</span>isotopes</span></code></pre></div>
 <pre><code>##      isoto number mass         
 ## [1,] &quot;N&quot;   &quot;1&quot;    &quot;14.003074&quot;  
-## [2,] &quot;H&quot;   &quot;3&quot;    &quot;1.007825032&quot;
-</code></pre>
-
-<p>Depending of the circumstances, you may want to change the charge of the
-molecular formula.</p>
-
-<pre><code class="r">formula &lt;- set.charge.formula(formula, charge=1)
-</code></pre>
-
+## [2,] &quot;H&quot;   &quot;3&quot;    &quot;1.007825032&quot;</code></pre>
+<p>Depending of the circumstances, you may want to change the charge of the molecular formula.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">set.charge.formula</span>(formula, <span class="at">charge=</span><span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div id="initializing-a-formula-from-the-symbol-expression" class="section level2">
 <h2>Initializing a Formula from the Symbol Expression</h2>
-
-<p>Other way to create a <code>cdkFormula</code> is from the symbol expression. Thus,
-setting the characters of the elemental formula, the function <code>get.formula</code>
-parses it to an object of <code>cdkFormula-class</code>.</p>
-
-<pre><code class="r">formula &lt;- get.formula(&#39;NH4&#39;, charge = 1)
-formula
-</code></pre>
-
-<pre><code>## cdkFormula:  [H4N]+ , mass =  18.03383 , charge =  1
-</code></pre>
-
+<p>Other way to create a <code>cdkFormula</code> is from the symbol expression. Thus, setting the characters of the elemental formula, the function <code>get.formula</code> parses it to an object of <code>cdkFormula-class</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">get.formula</span>(<span class="st">&#39;NH4&#39;</span>, <span class="at">charge =</span> <span class="dv">1</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>formula</span></code></pre></div>
+<pre><code>## cdkFormula:  [H4N]+ , mass =  18.03383 , charge =  1</code></pre>
+</div>
+<div id="generating-molecular-formula" class="section level2">
 <h2>Generating Molecular Formula</h2>
-
-<p>Mass spectrometry is an essential and reliable technique to determine the
-molecular mass of compounds. Conversely, one can use the measured mass
-to identify the compound via its elemental formula. One of the limitations
-of the method is the precision and accuracy of the instrumentation. As
-a result, rather than specify exact masses, we specify tolerances or ranges
-of possible mass, resulting in multiple candidate formulae for a given mass
-window. The <code>generate.formula</code> function returns a list of formulae which have
-a given mass (within an error window)</p>
-
-<pre><code class="r">mfSet &lt;- generate.formula(18.03383, window=1,
-    elements=list(c(&quot;C&quot;,0,50),c(&quot;H&quot;,0,50),c(&quot;N&quot;,0,50)),
-    validation=FALSE)
-mfSet
-</code></pre>
-
+<p>Mass spectrometry is an essential and reliable technique to determine the molecular mass of compounds. Conversely, one can use the measured mass to identify the compound via its elemental formula. One of the limitations of the method is the precision and accuracy of the instrumentation. As a result, rather than specify exact masses, we specify tolerances or ranges of possible mass, resulting in multiple candidate formulae for a given mass window. The <code>generate.formula</code> function returns a list of formulae which have a given mass (within an error window)</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mfSet <span class="ot">&lt;-</span> <span class="fu">generate.formula</span>(<span class="fl">18.03383</span>, <span class="at">window=</span><span class="dv">1</span>,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">elements=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;C&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>),<span class="fu">c</span>(<span class="st">&quot;H&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>),<span class="fu">c</span>(<span class="st">&quot;N&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>)),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">validation=</span><span class="cn">FALSE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>mfSet</span></code></pre></div>
 <pre><code>## [[1]]
 ## cdkFormula:  H4N , mass =  18.03437 , charge =  0 
 ## 
@@ -321,41 +210,22 @@ mfSet
 ## cdkFormula:  CH6 , mass =  18.04695 , charge =  0 
 ## 
 ## [[3]]
-## cdkFormula:  H18 , mass =  18.14085 , charge =  0
-</code></pre>
-
-<p>It is important to know if an elemental formula is valid. The method <code>isvalid.formula</code>
-provides this function. Two constraints can be applied, the
-<a href="https://en.wikipedia.org/wiki/Nitrogen_rule">nitrogen rule</a> and the  <a href="http://fiehnlab.ucdavis.edu/projects/seven-golden-rules/ring-double-bonds">RDBE rule</a> (Ring Double Bond Equivalent).</p>
-
-<pre><code class="r">formula &lt;- get.formula(&#39;NH4&#39;, charge = 0)
-isvalid.formula(formula,rule=c(&quot;nitrogen&quot;,&quot;RDBE&quot;))
-</code></pre>
-
-<pre><code>## [1] FALSE
-</code></pre>
-
-<p>We can observe that the ammonium is only valid if it is defined with charge
-of +1.</p>
-
-<pre><code class="r">formula &lt;- get.formula(&#39;NH4&#39;, charge = 1)
-isvalid.formula(formula,rule=c(&quot;nitrogen&quot;,&quot;RDBE&quot;))
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
-
-<p>The <code>generate.formula</code> method can perform these validation tests during formula generation by setting <code>validation=TRUE</code>. However, this can significantly slow down the process of genersating formulae, especially with larger mass windows. When the default of <code>FALSE</code> is used, nonsensical formulae may be generated, and it&#39;s up to the user to filter them out.</p>
-
+## cdkFormula:  H18 , mass =  18.14085 , charge =  0</code></pre>
+<p>It is important to know if an elemental formula is valid. The method <code>isvalid.formula</code> provides this function. Two constraints can be applied, the <a href="https://en.wikipedia.org/wiki/Nitrogen_rule">nitrogen rule</a> and the <a href="https://fiehnlab.ucdavis.edu/projects/seven-golden-rules/ring-double-bonds">RDBE rule</a> (Ring Double Bond Equivalent).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">get.formula</span>(<span class="st">&#39;NH4&#39;</span>, <span class="at">charge =</span> <span class="dv">0</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">isvalid.formula</span>(formula,<span class="at">rule=</span><span class="fu">c</span>(<span class="st">&quot;nitrogen&quot;</span>,<span class="st">&quot;RDBE&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>We can observe that the ammonium is only valid if it is defined with charge of +1.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">get.formula</span>(<span class="st">&#39;NH4&#39;</span>, <span class="at">charge =</span> <span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">isvalid.formula</span>(formula,<span class="at">rule=</span><span class="fu">c</span>(<span class="st">&quot;nitrogen&quot;</span>,<span class="st">&quot;RDBE&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>The <code>generate.formula</code> method can perform these validation tests during formula generation by setting <code>validation=TRUE</code>. However, this can significantly slow down the process of genersating formulae, especially with larger mass windows. When the default of <code>FALSE</code> is used, nonsensical formulae may be generated, and it’s up to the user to filter them out.</p>
 <p>In contrast, the <code>generate.formula.iter</code> method employs the Round Robin formula generation algorithm, which is significantly faster than the default method. In contrast to <code>generate/formula</code>, this method returns an iterator which allows you to process large formula sets without excessive memory usage.</p>
-
-<pre><code class="r">mit &lt;- generate.formula.iter(100, charge=0, window=0.1,
-                             elements=list(c(&quot;C&quot;,0,50), c(&quot;H&quot;,0,50), c(&quot;N&quot;,0,50)))
-hit &lt;- itertools::ihasNext(mit)
-while (itertools::hasNext(hit)) 
-    print(iterators::nextElem(hit))
-</code></pre>
-
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>mit <span class="ot">&lt;-</span> <span class="fu">generate.formula.iter</span>(<span class="dv">100</span>, <span class="at">charge=</span><span class="dv">0</span>, <span class="at">window=</span><span class="fl">0.1</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">elements=</span><span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;C&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>), <span class="fu">c</span>(<span class="st">&quot;H&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>), <span class="fu">c</span>(<span class="st">&quot;N&quot;</span>,<span class="dv">0</span>,<span class="dv">50</span>)))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>hit <span class="ot">&lt;-</span> itertools<span class="sc">::</span><span class="fu">ihasNext</span>(mit)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (itertools<span class="sc">::</span><span class="fu">hasNext</span>(hit)) </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(iterators<span class="sc">::</span><span class="fu">nextElem</span>(hit))</span></code></pre></div>
 <pre><code>## [1] &quot;[12]C8[1]H4&quot;
 ## [1] &quot;[12]C7[1]H2[14]N&quot;
 ## [1] &quot;[12]C6[14]N2&quot;
@@ -363,40 +233,39 @@ while (itertools::hasNext(hit))
 ## [1] &quot;[12]C3[1]H8[14]N4&quot;
 ## [1] &quot;[12]C2[1]H6[14]N5&quot;
 ## [1] &quot;[12]C[1]H4[14]N6&quot;
-## [1] &quot;[1]H2[14]N7&quot;
-</code></pre>
-
+## [1] &quot;[1]H2[14]N7&quot;</code></pre>
 <p>Note that by default, this function will not check for validity of the generated formulae.</p>
-
+</div>
+<div id="calculating-isotope-pattern" class="section level2">
 <h2>Calculating Isotope Pattern</h2>
-
-<p>Due to the measurement errors in medium resolution spectrometry, a given
-error window can result in a massive number of candidate formulae. The
-isotope pattern of ions obtained experimentally can be compared with the
-theoretical ones. The best match is reflected as the most probable elemental
-formula. <code>rcdk</code> provides the function <code>get.isotope.pattern</code> which predicts
-the theoretical isotope pattern given a formula.</p>
-
-<pre><code class="r">formula &lt;- get.formula(&#39;CHCl3&#39;, charge = 0)
-isotopes &lt;- get.isotopes.pattern(formula,minAbund=0.1)
-isotopes
-</code></pre>
-
+<p>Due to the measurement errors in medium resolution spectrometry, a given error window can result in a massive number of candidate formulae. The isotope pattern of ions obtained experimentally can be compared with the theoretical ones. The best match is reflected as the most probable elemental formula. <code>rcdk</code> provides the function <code>get.isotope.pattern</code> which predicts the theoretical isotope pattern given a formula.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">&lt;-</span> <span class="fu">get.formula</span>(<span class="st">&#39;CHCl3&#39;</span>, <span class="at">charge =</span> <span class="dv">0</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>isotopes <span class="ot">&lt;-</span> <span class="fu">get.isotopes.pattern</span>(formula,<span class="at">minAbund=</span><span class="fl">0.1</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>isotopes</span></code></pre></div>
 <pre><code>##          mass     abund
 ## [1,] 117.9144 1.0000000
 ## [2,] 119.9114 0.9598733
-## [3,] 121.9085 0.3071189
-</code></pre>
+## [3,] 121.9085 0.3071189</code></pre>
+<p>In this example we generate a formula for a possible compound with a charge (<span class="math inline">\(z \approx 0\)</span>) containing the standard elements C, H, and Cl. The isotope pattern can be visually inspected, as shown below.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(isotopes, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;m/z&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Intensity&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
 
-<p>In this example we generate a formula for a possible compound with a charge
-(\(z \approx 0\)) containing the standard elements C, H, and Cl. The isotope
-pattern can be visually inspected, as shown below.</p>
 
-<pre><code class="r">plot(isotopes, type=&quot;h&quot;, xlab=&quot;m/z&quot;, ylab=&quot;Intensity&quot;)
-</code></pre>
 
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-11"/></p>
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
-
 </html>
