@@ -12,29 +12,42 @@
 
 <meta name="author" content="Rajarshi Guha" />
 
-<meta name="date" content="2021-10-14" />
+<meta name="date" content="2022-09-25" />
 
 <title>Using the CDK from R</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -52,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -109,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,7 +146,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,29 +340,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">Using the CDK from R</h1>
 <h4 class="author">Rajarshi Guha</h4>
-<h4 class="date">2021-10-14</h4>
+<h4 class="date">2022-09-25</h4>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#using-the-cdk-from-r">Using the CDK from R</a>
+<li><a href="#using-the-cdk-from-r" id="toc-using-the-cdk-from-r">Using
+the CDK from R</a>
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#getting-started">Getting started</a></li>
-<li><a href="#input-and-output">Input and Output</a>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#getting-started" id="toc-getting-started">Getting
+started</a></li>
+<li><a href="#input-and-output" id="toc-input-and-output">Input and
+Output</a>
 <ul>
-<li><a href="#parsing-smiles">Parsing SMILES</a></li>
-<li><a href="#generating-smiles">Generating SMILES</a></li>
+<li><a href="#parsing-smiles" id="toc-parsing-smiles">Parsing
+SMILES</a></li>
+<li><a href="#generating-smiles" id="toc-generating-smiles">Generating
+SMILES</a></li>
 </ul></li>
-<li><a href="#visualization">Visualization</a></li>
-<li><a href="#manipulating-molecules">Manipulating Molecules</a>
+<li><a href="#visualization" id="toc-visualization">Visualization</a></li>
+<li><a href="#manipulating-molecules" id="toc-manipulating-molecules">Manipulating Molecules</a>
 <ul>
-<li><a href="#adding-information-to-molecules">Adding Information to Molecules</a></li>
-<li><a href="#atoms-and-bonds">Atoms and Bonds</a></li>
-<li><a href="#substructure-matching">Substructure matching</a></li>
+<li><a href="#adding-information-to-molecules" id="toc-adding-information-to-molecules">Adding Information to
+Molecules</a></li>
+<li><a href="#atoms-and-bonds" id="toc-atoms-and-bonds">Atoms and
+Bonds</a></li>
+<li><a href="#substructure-matching" id="toc-substructure-matching">Substructure matching</a></li>
 </ul></li>
-<li><a href="#molecular-descriptors">Molecular Descriptors</a></li>
-<li><a href="#fingerprints">Fingerprints</a></li>
+<li><a href="#molecular-descriptors" id="toc-molecular-descriptors">Molecular Descriptors</a></li>
+<li><a href="#fingerprints" id="toc-fingerprints">Fingerprints</a></li>
 </ul></li>
 </ul>
 </div>
@@ -172,28 +378,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Using the CDK from R</h1>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Given that much of cheminformatics involves mathematical and statistical modeling of chemical information, R is a natural platform for such work. There are many cheminformatics applications that will generate useful information such as descriptors, fingerprints and so on. While one can always run these applications to generate data that is then imported into R, it can be convenient to be able to manipulate chemical structures and generate chemical information with the R environment.</p>
-<p>The <a href="https://cdk.github.io">CDK</a> is a Java library for cheminformatics that supports a wide variety of cheminformatics functionality ranging from reading molecular file formats, performing ring perception and armaticity detection to fingerprint generation and molecular descriptors. The CDK website provides links to useful documentation as well as complete <a href="https://cdk.github.io/cdk/2.3/docs/api/index.html?overview-summary.html">Javadocs</a></p>
+<p>Given that much of cheminformatics involves mathematical and
+statistical modeling of chemical information, R is a natural platform
+for such work. There are many cheminformatics applications that will
+generate useful information such as descriptors, fingerprints and so on.
+While one can always run these applications to generate data that is
+then imported into R, it can be convenient to be able to manipulate
+chemical structures and generate chemical information with the R
+environment.</p>
+<p>The <a href="https://cdk.github.io">CDK</a> is a Java library for
+cheminformatics that supports a wide variety of cheminformatics
+functionality ranging from reading molecular file formats, performing
+ring perception and aromaticity detection to fingerprint generation and
+molecular descriptors. The CDK website provides links to useful
+documentation as well as complete <a href="https://cdk.github.io/cdk/2.3/docs/api/index.html?overview-summary.html">Javadocs</a></p>
 </div>
 <div id="getting-started" class="section level2">
 <h2>Getting started</h2>
-<p>The goal of the <code>rcdk</code> package is to allow an R user to access the cheminformatics functionality of the <a href="https://cdk.github.io">CDK</a> from within R. While one can use the <a href="https://CRAN.R-project.org/package=rJava">rJava</a> package to make direct calls to specific methods in the <a href="https://cdk.github.io">CDK</a>, from R, such usage does not usually follow common R idioms. Thus <code>rcdk</code> aims to allow users to use the <a href="https://cdk.github.io">CDK</a> classes and methods in an R-like fashion.</p>
+<p>The goal of the <code>rcdk</code> package is to allow an R user to
+access the cheminformatics functionality of the <a href="https://cdk.github.io">CDK</a> from within R. While one can use
+the <a href="https://CRAN.R-project.org/package=rJava">rJava</a> package
+to make direct calls to specific methods in the <a href="https://cdk.github.io">CDK</a>, from R, such usage does not
+usually follow common R idioms. Thus <code>rcdk</code> aims to allow
+users to use the <a href="https://cdk.github.io">CDK</a> classes and
+methods in an R-like fashion.</p>
 <p>The library is loaded as follows</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rcdk)</span></code></pre></div>
-<p>We can also check the version of the <a href="https://cdk.github.io">CDK</a> that is being used in the package</p>
+<p>We can also check the version of the <a href="https://cdk.github.io">CDK</a> that is being used in the
+package</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cdk.version</span>()</span></code></pre></div>
-<pre><code>## [1] &quot;2.3&quot;</code></pre>
-<p>The package also provides an example data set, called <code>bpdata</code> which contains 277 molecules, in SMILES format and their associated boiling points (BP) in Kelvin. The <code>data.frame</code> has two columns, viz., the SMILES and the BP. Molecules names are used as row names:</p>
+<pre><code>## [1] &quot;2.8&quot;</code></pre>
+<p>The package also provides an example data set, called
+<code>bpdata</code> which contains 277 molecules, in SMILES format and
+their associated boiling points (BP) in Kelvin. The
+<code>data.frame</code> has two columns, viz., the SMILES and the BP.
+Molecules names are used as row names:</p>
 <pre><code>## &#39;data.frame&#39;:    277 obs. of  2 variables:
 ##  $ SMILES: chr  &quot;C(Br)(Cl)(Cl)Cl&quot; &quot;ClC(F)(F)F&quot; &quot;C(Cl)(Cl)(Cl)Cl&quot; &quot;C(F)(F)(F)F&quot; ...
 ##  $ BP    : num  378 192 350 145 422 ...</code></pre>
 </div>
 <div id="input-and-output" class="section level2">
 <h2>Input and Output</h2>
-<p>Chemical structures come in a variety of formats and the CDK supports many of them. Many such formats are disk based and these files can be parsed and loaded by specifying their full paths</p>
+<p>Chemical structures come in a variety of formats and the CDK supports
+many of them. Many such formats are disk based and these files can be
+parsed and loaded by specifying their full paths</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">load.molecules</span>( <span class="fu">c</span>(<span class="st">&#39;data1.sdf&#39;</span>, <span class="st">&#39;/some/path/data2.sdf&#39;</span>) )</span></code></pre></div>
-<p>Note that the above function will load any file format that is supported by the CDK, so there’s no need to specify formats. In addition one can specify a URL (which should start with <code>http://</code>) to specify remote files as well. The result of this function is a list of molecule objects. The molecule objects are of class <code>jobjRef</code> (provided by the <a href="https://CRAN.R-project.org/package=rJava">rJava</a> package). As a result,they are pretty opaque to the user and are really meant to be processed using methods from the <code>rcdk</code> or <a href="https://CRAN.R-project.org/package=rJava">rJava</a> packages.</p>
-<p>However, since it loads all the molecules from the specified file into a list, large files can lead to out of memory errors. In such a situtation it is preferable to iterate over the file, one structure at a time. Currently this behavior is supported for SDF and SMILES files. An example of such a usage for a large SD file would be</p>
+<p>Note that the above function will load any file format that is
+supported by the CDK, so there’s no need to specify formats. In addition
+one can specify a URL (which should start with <code>http://</code>) to
+specify remote files as well. The result of this function is a list of
+molecule objects. The molecule objects are of class <code>jobjRef</code>
+(provided by the <a href="https://CRAN.R-project.org/package=rJava">rJava</a> package). As a
+result,they are pretty opaque to the user and are really meant to be
+processed using methods from the <code>rcdk</code> or <a href="https://CRAN.R-project.org/package=rJava">rJava</a> packages.</p>
+<p>However, since it loads all the molecules from the specified file
+into a list, large files can lead to out of memory errors. In such a
+situtation it is preferable to iterate over the file, one structure at a
+time. Currently this behavior is supported for SDF and SMILES files. An
+example of such a usage for a large SD file would be</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iter <span class="ot">&lt;-</span> <span class="fu">iload.molecules</span>(<span class="st">&#39;verybig.sdf&#39;</span>, <span class="at">type=</span><span class="st">&#39;sdf&#39;</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(<span class="fu">hasNext</span>(iter)) {</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> mol <span class="ot">&lt;-</span> <span class="fu">nextElem</span>(iter)</span>
@@ -201,11 +443,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div id="parsing-smiles" class="section level3">
 <h3>Parsing SMILES</h3>
-<p>Another common way to obtain molecule objects is by parsing SMILES strings. The simplest way to do this is</p>
+<p>Another common way to obtain molecule objects is by parsing SMILES
+strings. The simplest way to do this is</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>smile <span class="ot">&lt;-</span> <span class="st">&#39;c1ccccc1CC(=O)C(N)CC1CCCCOC1&#39;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mol <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(smile)[[<span class="dv">1</span>]]</span></code></pre></div>
-<p>Usage is more efficient when multiple SMILE are supplied, since then a single SMILES parser object is used to parse all the supplied SMILES.</p>
-<p>If you plan on parsing a large number of SMILES, you may run into memory issues, due to the large size of <code>IAtomContainer</code> objects. In such a case, it can be useful to call the Java and R garbage collectors explicitly at the appropriate time. In addition it can be useful to explicitly allocate a large amount of memory for the JVM. For example,</p>
+<p>Usage is more efficient when multiple SMILE are supplied, since then
+a single SMILES parser object is used to parse all the supplied
+SMILES.</p>
+<p>If you plan on parsing a large number of SMILES, you may run into
+memory issues, due to the large size of <code>IAtomContainer</code>
+objects. In such a case, it can be useful to call the Java and R garbage
+collectors explicitly at the appropriate time. In addition it can be
+useful to explicitly allocate a large amount of memory for the JVM. For
+example,</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;java.parameters&quot;</span><span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;-Xmx4000m&quot;</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rcdk)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (smile <span class="cf">in</span> smiles) {</span>
@@ -215,14 +465,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">jcall</span>(<span class="st">&quot;java/lang/System&quot;</span>,<span class="st">&quot;V&quot;</span>,<span class="st">&quot;gc&quot;</span>)</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gc</span>()</span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>Given a list of molecule objects, it is possible to serialize them to a file in some specified format. Currently, the only output formats are SMILES or SDF. To write molecules to a disk file in SDF format.</p>
+<p>Given a list of molecule objects, it is possible to serialize them to
+a file in some specified format. Currently, the only output formats are
+SMILES or SDF. To write molecules to a disk file in SDF format.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.molecules</span>(mols, <span class="at">filename=</span><span class="st">&#39;mymols.sdf&#39;</span>)</span></code></pre></div>
-<p>By default, if mols is a list of multiple molecules, all of them will be written to a single SDF file. If this is not desired, you can write each on to individual files (which are prefixed by the value of filename):</p>
+<p>By default, if mols is a list of multiple molecules, all of them will
+be written to a single SDF file. If this is not desired, you can write
+each on to individual files (which are prefixed by the value of
+filename):</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">write.molecules</span>(mols, <span class="at">filename=</span><span class="st">&#39;mymols.sdf&#39;</span>, <span class="at">together=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 </div>
 <div id="generating-smiles" class="section level3">
 <h3>Generating SMILES</h3>
-<p>Finally, we can generate a SMILES representation of a molecule using</p>
+<p>Finally, we can generate a SMILES representation of a molecule
+using</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>smiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;CCC&#39;</span>, <span class="st">&#39;c1ccccc1&#39;</span>, <span class="st">&#39;CCCC(C)(C)CC(=O)NC&#39;</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(smiles)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get.smiles</span>(mols[[<span class="dv">1</span>]])</span></code></pre></div>
@@ -230,18 +486,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">lapply</span>(mols, get.smiles))</span></code></pre></div>
 <pre><code>##                  CCC             c1ccccc1   CCCC(C)(C)CC(=O)NC 
 ##                &quot;CCC&quot;        &quot;C1=CC=CC=C1&quot; &quot;CCCC(C)(C)CC(=O)NC&quot;</code></pre>
-<p>The <a href="https://cdk.github.io">CDK</a> supports a number of <em>flavors</em> when generating SMILES. For example, you can generate a SMILES with or without chirality information or generate SMILES in <a href="https://www.chemguide.co.uk/basicorg/bonding/benzene1.html">Kekule form</a>. The <code>smiles.flavors</code> generates an object that represents the various flavors desired for SMILES output. See the <a href="https://cdk.github.io/cdk/2.3/docs/api/index.html?org/openscience/cdk/smiles/SmiFlavor.html">SmiFlavor javadocs</a> for the full list of possible flavors. Example usage is</p>
+<p>The <a href="https://cdk.github.io">CDK</a> supports a number of
+<em>flavors</em> when generating SMILES. For example, you can generate a
+SMILES with or without chirality information or generate SMILES in <a href="https://www.chemguide.co.uk/basicorg/bonding/benzene1.html">Kekule
+form</a>. The <code>smiles.flavors</code> generates an object that
+represents the various flavors desired for SMILES output. See the <a href="https://cdk.github.io/cdk/2.3/docs/api/index.html?org/openscience/cdk/smiles/SmiFlavor.html">SmiFlavor
+javadocs</a> for the full list of possible flavors. Example usage is</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>smiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;CCC&#39;</span>, <span class="st">&#39;c1ccccc1&#39;</span>, <span class="st">&#39;CCc1ccccc1CC(C)(C)CC(=O)NC&#39;</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(smiles)</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get.smiles</span>(mols[[<span class="dv">3</span>]], <span class="fu">smiles.flavors</span>(<span class="fu">c</span>(<span class="st">&#39;UseAromaticSymbols&#39;</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;CCc1ccccc1CC(C)(C)CC(=O)NC&quot;</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.smiles</span>(mols[[<span class="dv">3</span>]], <span class="fu">smiles.flavors</span>(<span class="fu">c</span>(<span class="st">&#39;Generic&#39;</span>,<span class="st">&#39;CxSmiles&#39;</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;CCC1=CC=CC=C1CC(C)(C)CC(=O)NC&quot;</code></pre>
-<p>Using the <a href="http://butane.chem.uiuc.edu/jsmoore/marvin/help/formats/cxsmiles-doc.html">CxSmiles</a> flavors allows the user to encode a variety of information in the SMILES string, such as 2D or 3D coordinates.</p>
+<p>Using the <a href="http://butane.chem.uiuc.edu/jsmoore/marvin/help/formats/cxsmiles-doc.html">CxSmiles</a>
+flavors allows the user to encode a variety of information in the SMILES
+string, such as 2D or 3D coordinates.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;CCC&#39;</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">generate.2d.coordinates</span>(m)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
-<pre><code>## [1] &quot;Java-Object{AtomContainer(1931444790, #A:3, AtomRef{Atom(673186785, S:C, H:3, 2D:[(-1.299038105676659, 1.1102230246251565E-15)], AtomType(673186785, FC:0, Isotope(673186785, Element(673186785, S:C, AN:6))))}, AtomRef{Atom(2142080121, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(2142080121, FC:0, Isotope(2142080121, Element(2142080121, S:C, AN:6))))}, AtomRef{Atom(1906808037, S:C, H:3, 2D:[(1.887379141862766E-15, 2.250000000000001)], AtomType(1906808037, FC:0, Isotope(1906808037, Element(1906808037, S:C, AN:6))))}, #B:2, BondRef{Bond(626742236, #O:SINGLE, #S:NONE, #A:2, AtomRef{Atom(673186785, S:C, H:3, 2D:[(-1.299038105676659, 1.1102230246251565E-15)], AtomType(673186785, FC:0, Isotope(673186785, Element(673186785, S:C, AN:6))))}, AtomRef{Atom(2142080121, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(2142080121, FC:0, Isotope(2142080121, Element(2142080121, S:C, AN:6))))}, ElectronContainer(626742236EC:2))}, BondRef{Bond(500772834, #O:SINGLE, #S:NONE, #A:2, AtomRef{Atom(2142080121, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(2142080121, FC:0, Isotope(2142080121, Element(2142080121, S:C, AN:6))))}, AtomRef{Atom(1906808037, S:C, H:3, 2D:[(1.887379141862766E-15, 2.250000000000001)], AtomType(1906808037, FC:0, Isotope(1906808037, Element(1906808037, S:C, AN:6))))}, ElectronContainer(500772834EC:2))})}&quot;</code></pre>
+<pre><code>## [1] &quot;Java-Object{AtomContainer(415186196, #A:3, AtomRef{Atom(149047107, S:C, H:3, 2D:[(-1.299038105676659, 1.1102230246251565E-15)], AtomType(149047107, FC:0, Isotope(149047107, Element(149047107, S:C, AN:6))))}, AtomRef{Atom(1956710488, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(1956710488, FC:0, Isotope(1956710488, Element(1956710488, S:C, AN:6))))}, AtomRef{Atom(603856241, S:C, H:3, 2D:[(1.887379141862766E-15, 2.250000000000001)], AtomType(603856241, FC:0, Isotope(603856241, Element(603856241, S:C, AN:6))))}, #B:2, BondRef{Bond(1337344609, #O:SINGLE, #S:NONE, #A:2, AtomRef{Atom(149047107, S:C, H:3, 2D:[(-1.299038105676659, 1.1102230246251565E-15)], AtomType(149047107, FC:0, Isotope(149047107, Element(149047107, S:C, AN:6))))}, AtomRef{Atom(1956710488, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(1956710488, FC:0, Isotope(1956710488, Element(1956710488, S:C, AN:6))))}, ElectronContainer(1337344609EC:2))}, BondRef{Bond(1113619023, #O:SINGLE, #S:NONE, #A:2, AtomRef{Atom(1956710488, S:C, H:2, 2D:[(-7.771561172376096E-16, 0.7500000000000007)], AtomType(1956710488, FC:0, Isotope(1956710488, Element(1956710488, S:C, AN:6))))}, AtomRef{Atom(603856241, S:C, H:3, 2D:[(1.887379141862766E-15, 2.250000000000001)], AtomType(603856241, FC:0, Isotope(603856241, Element(603856241, S:C, AN:6))))}, ElectronContainer(1113619023EC:2))})}&quot;</code></pre>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.smiles</span>(m, <span class="fu">smiles.flavors</span>(<span class="fu">c</span>(<span class="st">&#39;CxSmiles&#39;</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;CCC&quot;</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.smiles</span>(m, <span class="fu">smiles.flavors</span>(<span class="fu">c</span>(<span class="st">&#39;CxCoordinates&#39;</span>)))</span></code></pre></div>
@@ -250,54 +513,107 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
-<p>The <code>rcdk</code> package supports 2D rendering of chemical structures. This can be used to view the structure of individual molecules or multiple molecules in a tabular format. It is also possible to view a molecular-data table, where one of the columns is the 2D image and the remainder can contain data associated with the molecules.</p>
-<p>Due to Java event handling issues on OS X, depictions are handled using an external helper, which means that depiction generation can be slower on OS X compared to other platforms.</p>
-<p>Molecule visualization is performed using the <code>view.molecule.2d</code> function. This handles individual molecules as well as a list of molecules. In the latter case, the depictions are arranged in a grid (with 4 columns by default).</p>
+<p>The <code>rcdk</code> package supports 2D rendering of chemical
+structures. This can be used to view the structure of individual
+molecules or multiple molecules in a tabular format. It is also possible
+to view a molecular-data table, where one of the columns is the 2D image
+and the remainder can contain data associated with the molecules.</p>
+<p>Due to Java event handling issues on OS X, depictions are handled
+using an external helper, which means that depiction generation can be
+slower on OS X compared to other platforms.</p>
+<p>Molecule visualization is performed using the
+<code>view.molecule.2d</code> function. This handles individual
+molecules as well as a list of molecules. In the latter case, the
+depictions are arranged in a grid (with 4 columns by default).</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>smiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;CCC&#39;</span>, <span class="st">&#39;CCN&#39;</span>, <span class="st">&#39;CCN(C)(C)&#39;</span>,</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;c1ccccc1Cc1ccccc1&#39;</span>,</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;C1CCC1CC(CN(C)(C))CC(=O)CC&#39;</span>)</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(smiles)</span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">view.molecule.2d</span>(mols[[<span class="dv">1</span>]])</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">view.molecule.2d</span>(mols)</span></code></pre></div>
-<p>The CDK depiction routines allow for extensive customization. These customizations can be accessed by creating a depictor object using <code>get.depictor</code>, which allows you to specify the size of the depiction, the depiction style (black and white, color on white, etc.), atom annotations (e.g., atom index), whether functional group abbreviations should be used or not and so on.</p>
+<p>The CDK depiction routines allow for extensive customization. These
+customizations can be accessed by creating a depictor object using
+<code>get.depictor</code>, which allows you to specify the size of the
+depiction, the depiction style (black and white, color on white, etc.),
+atom annotations (e.g., atom index), whether functional group
+abbreviations should be used or not and so on.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>depictor <span class="ot">&lt;-</span> <span class="fu">get.depictor</span>(<span class="at">style=</span><span class="st">&#39;cob&#39;</span>, <span class="at">abbr=</span><span class="st">&#39;reagents&#39;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">view.molecule.2d</span>(mols[[<span class="dv">5</span>]], <span class="at">depictor=</span>depictor)</span></code></pre></div>
-<p>Once you have a depictor object, you can set individual properties using the <code>$</code> notation. This can be useful if you plan to generate a lot of depictions so that a new depictor is not recreated for each new structure.</p>
+<p>Once you have a depictor object, you can set individual properties
+using the <code>$</code> notation. This can be useful if you plan to
+generate a lot of depictions so that a new depictor is not recreated for
+each new structure.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>depictor <span class="ot">&lt;-</span> <span class="fu">get.depictor</span>(<span class="at">style=</span><span class="st">&#39;cob&#39;</span>, <span class="at">abbr=</span><span class="st">&#39;reagents&#39;</span>, <span class="at">width=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">300</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">view.molecule.2d</span>(mols[[<span class="dv">5</span>]], <span class="at">depictor=</span>depictor)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#depictor$setStyle(&#39;cow&#39;)</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#view.molecule.2d(mols[[5]], depictor=depictor)</span></span></code></pre></div>
-<p>The method also allows you to highlight substructures using <a href="https://en.wikipedia.org/wiki/Smiles_arbitrary_target_specification">SMARTS</a>. This is useful in highlight commen substructures in a set of molecules</p>
+<p>The method also allows you to highlight substructures using <a href="https://en.wikipedia.org/wiki/Smiles_arbitrary_target_specification">SMARTS</a>.
+This is useful in highlight commen substructures in a set of
+molecules</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>depictor <span class="ot">&lt;-</span> <span class="fu">get.depictor</span>(<span class="at">style=</span><span class="st">&#39;cob&#39;</span>, <span class="at">abbr=</span><span class="st">&#39;reagents&#39;</span>, <span class="at">sma=</span><span class="st">&#39;N(C)(C)&#39;</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">view.molecule.2d</span>(mols, <span class="at">depictor=</span>depictor)</span></code></pre></div>
-<p>In many cases, it is useful to view a “molecular spreadsheet”, which is a table of molecular structures along with information (numeric or textual) related to the molecules being viewed. The data is arranged in a spreadsheet like manner, with one of the columns being molecules and the remainder being textual or numeric information.</p>
-<p>This can be achieved using the <code>view.table</code> method which takes a list of molecule objects and a <code>data.frame</code> containing the associated data. As expected, the number of rows in the <code>data.frame</code> should equal the length of the molecule list. Note that currently, there is not explicit binding between the rows of the <code>data.frame</code> and the elements of the list containing the molecules. Thus the user should take care that the ordering of the <code>data.frame</code> matches that of the list.</p>
+<p>In many cases, it is useful to view a “molecular spreadsheet”, which
+is a table of molecular structures along with information (numeric or
+textual) related to the molecules being viewed. The data is arranged in
+a spreadsheet like manner, with one of the columns being molecules and
+the remainder being textual or numeric information.</p>
+<p>This can be achieved using the <code>view.table</code> method which
+takes a list of molecule objects and a <code>data.frame</code>
+containing the associated data. As expected, the number of rows in the
+<code>data.frame</code> should equal the length of the molecule list.
+Note that currently, there is not explicit binding between the rows of
+the <code>data.frame</code> and the elements of the list containing the
+molecules. Thus the user should take care that the ordering of the
+<code>data.frame</code> matches that of the list.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>smiles <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;CCC&#39;</span>, <span class="st">&#39;CCN&#39;</span>, <span class="st">&#39;CCN(C)(C)&#39;</span>,<span class="st">&#39;c1ccccc1Cc1ccccc1&#39;</span>)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(smiles)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>dframe <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">4</span>),</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">toxicity =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">&#39;Toxic&#39;</span>, <span class="st">&#39;Toxic&#39;</span>, <span class="st">&#39;Nontoxic&#39;</span>, <span class="st">&#39;Nontoxic&#39;</span>)),</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">solubility =</span> <span class="fu">c</span>(<span class="st">&#39;yes&#39;</span>, <span class="st">&#39;yes&#39;</span>, <span class="st">&#39;no&#39;</span>, <span class="st">&#39;yes&#39;</span>))</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">view.table</span>(mols, dframe)</span></code></pre></div>
-<p>While the <code>view.molecule.2d</code> function is useful to visualize structures, the depictions can’t be included in other visualizations such as plots. For such use cases, the <code>view.image.2d</code> function produces a raster image that can be included in plots. This function handles one molecule at a time.</p>
+<p>While the <code>view.molecule.2d</code> function is useful to
+visualize structures, the depictions can’t be included in other
+visualizations such as plots. For such use cases, the
+<code>view.image.2d</code> function produces a raster image that can be
+included in plots. This function handles one molecule at a time.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>img <span class="ot">&lt;-</span> <span class="fu">view.image.2d</span>(<span class="fu">parse.smiles</span>(<span class="st">&quot;B([C@H](CC(C)C)NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)C2=NC=CN=C2)(O)O&quot;</span>)[[<span class="dv">1</span>]])</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">pch=</span><span class="dv">19</span>)</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rasterImage</span>(img, <span class="dv">1</span>,<span class="dv">6</span>, <span class="dv">5</span>,<span class="dv">10</span>)</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>Finally, the <code>copy.image.to.clipboard</code> function allows you to copy a depiction to the system clipboard, from where it can be pasted into other applications. This can be more convenient than saving a raster image.</p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Finally, the <code>copy.image.to.clipboard</code> function allows you
+to copy a depiction to the system clipboard, from where it can be pasted
+into other applications. This can be more convenient than saving a
+raster image.</p>
 </div>
 <div id="manipulating-molecules" class="section level2">
 <h2>Manipulating Molecules</h2>
-<p>In general, given a <code>jobjRef</code> for a molecule object one can access all the class and methods of the <a href="https://cdk.github.io">CDK</a> library via rJava. However this can be cumbersome. The <code>rcdk</code> package exposes methods and classes that manipulate molecules.</p>
+<p>In general, given a <code>jobjRef</code> for a molecule object one
+can access all the class and methods of the <a href="https://cdk.github.io">CDK</a> library via rJava. However this can
+be cumbersome. The <code>rcdk</code> package exposes methods and classes
+that manipulate molecules.</p>
 <div id="adding-information-to-molecules" class="section level3">
 <h3>Adding Information to Molecules</h3>
-<p>In many scenarios it’s useful to associate information with molecules. Within R, you could always create a <code>data.frame</code> and store the molecule objects along with relevant information in it. However, when serializing the molecules, you want to be able to store the associated information with the structure itself (though keep in mind that only certain chemical file formats support metadata along with the structure).</p>
-<p>Using the <a href="https://cdk.github.io">CDK</a> it’s possible to directly add information to a molecule object using properties. Note that adding such properties uses a key-value paradigm, where the key should be of class character. The value can be of class <code>integer</code>, <code>double</code>, <code>character</code> or <code>jobjRef</code>. Obviously, after setting a property, you can get a property by its key.</p>
+<p>In many scenarios it’s useful to associate information with
+molecules. Within R, you could always create a <code>data.frame</code>
+and store the molecule objects along with relevant information in it.
+However, when serializing the molecules, you want to be able to store
+the associated information with the structure itself (though keep in
+mind that only certain chemical file formats support metadata along with
+the structure).</p>
+<p>Using the <a href="https://cdk.github.io">CDK</a> it’s possible to
+directly add information to a molecule object using properties. Note
+that adding such properties uses a key-value paradigm, where the key
+should be of class character. The value can be of class
+<code>integer</code>, <code>double</code>, <code>character</code> or
+<code>jobjRef</code>. Obviously, after setting a property, you can get a
+property by its key.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>mol <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;c1ccccc1&#39;</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.property</span>(mol, <span class="st">&quot;title&quot;</span>, <span class="st">&quot;Molecule 1&quot;</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.property</span>(mol, <span class="st">&quot;hvyAtomCount&quot;</span>, <span class="dv">6</span>)</span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">get.property</span>(mol, <span class="st">&quot;title&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Molecule 1&quot;</code></pre>
-<p>It is also possible to get all available properties at once in the from of a list. The property names are used as the list names.</p>
+<p>It is also possible to get all available properties at once in the
+from of a list. The property names are used as the list names.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.properties</span>(mol)</span></code></pre></div>
 <pre><code>## $`cdk:Title`
 ## [1] NA
@@ -307,12 +623,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## $hvyAtomCount
 ## [1] 6</code></pre>
-<p>After adding such properties to the molecule, you can write it out to an SD file, so that the property values become SD tags.</p>
+<p>After adding such properties to the molecule, you can write it out to
+an SD file, so that the property values become SD tags.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.molecules</span>(mol, <span class="st">&#39;tagged.sdf&#39;</span>, <span class="at">write.props=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="atoms-and-bonds" class="section level3">
 <h3>Atoms and Bonds</h3>
-<p>Probably the most important thing to do is to get the atoms and bonds of a molecule. The code below gets the atoms and bonds as lists of <code>jobjRef</code> objects, which can be manipulated using rJava or via other methods of this package.</p>
+<p>Probably the most important thing to do is to get the atoms and bonds
+of a molecule. The code below gets the atoms and bonds as lists of
+<code>jobjRef</code> objects, which can be manipulated using rJava or
+via other methods of this package.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mol <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;c1ccccc1C(Cl)(Br)c1ccccc1&#39;</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>atoms <span class="ot">&lt;-</span> <span class="fu">get.atoms</span>(mol)</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>bonds <span class="ot">&lt;-</span> <span class="fu">get.bonds</span>(mol)</span>
@@ -320,23 +640,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## No. of atoms = 15</code></pre>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;No. of bonds =&#39;</span>, <span class="fu">length</span>(bonds), <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
 <pre><code>## No. of bonds = 16</code></pre>
-<p>Given an atom the <code>rcdk</code> package does not offer a lot of methods to operate on it. One must access the <a href="https://cdk.github.io">CDK</a> directly. In the future more manipulators will be added. Right now, you can get the symbol for each atom</p>
+<p>Given an atom the <code>rcdk</code> package does not offer a lot of
+methods to operate on it. One must access the <a href="https://cdk.github.io">CDK</a> directly. In the future more
+manipulators will be added. Right now, you can get the symbol for each
+atom</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(<span class="fu">lapply</span>(atoms, get.symbol))</span></code></pre></div>
 <pre><code>##  [1] &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;Cl&quot; &quot;Br&quot; &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;  &quot;C&quot;</code></pre>
 <p>It’s also possible to get the 3D (or 2D coordinates) for an atom.</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">get.point3d</span>(atoms[[<span class="dv">1</span>]])</span></code></pre></div>
-<p>Given this, it’s quite easy to get the 3D coordinate matrix for a molecule</p>
+<p>Given this, it’s quite easy to get the 3D coordinate matrix for a
+molecule</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>coords <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&#39;rbind&#39;</span>, <span class="fu">lapply</span>(atoms, get.point3d))</span></code></pre></div>
-<p>Once you have the coordinate matrix, a quick way to check whether the molecule is flat is to do</p>
+<p>Once you have the coordinate matrix, a quick way to check whether the
+molecule is flat is to do</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> ( <span class="fu">any</span>(<span class="fu">apply</span>(coords, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x))) <span class="sc">==</span> <span class="dv">1</span>) ) {</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(<span class="st">&quot;molecule is flat&quot;</span>)</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## [1] &quot;molecule is flat&quot;</code></pre>
-<p>This is quite a simplistic check that just looks at whether the X, Y or Z coordinates are constant. To be more rigorous one could evaluate the moments of inertia about the axes.</p>
+<p>This is quite a simplistic check that just looks at whether the X, Y
+or Z coordinates are constant. To be more rigorous one could evaluate
+the moments of inertia about the axes.</p>
 </div>
 <div id="substructure-matching" class="section level3">
 <h3>Substructure matching</h3>
-<p>The <a href="https://cdk.github.io">CDK</a> library supports substructure searches using <a href="https://en.wikipedia.org/wiki/Smiles_arbitrary_target_specification">SMARTS</a> (or SMILES) patterns. The implementation allows one to check whether a target molecule contains a substructure or not as well as to retrieve the atoms and bonds of the target molecule that match the query substructure. At this point, the <code>rcdk</code> only support the former operation - given a query pattern, does it occur or not in a list of target molecules. The <code>matches</code> method of this package returns a logical vector where the <span class="math inline">\(i\)</span>’th element is <code>TRUE</code> if the <span class="math inline">\(i\)</span>’th target molecules contains the query substructure. An example of its usage would be to identify molecules that contain a carbon atom that has exactly two bonded neighbors.</p>
+<p>The <a href="https://cdk.github.io">CDK</a> library supports
+substructure searches using <a href="https://en.wikipedia.org/wiki/Smiles_arbitrary_target_specification">SMARTS</a>
+(or SMILES) patterns. The implementation allows one to check whether a
+target molecule contains a substructure or not as well as to retrieve
+the atoms and bonds of the target molecule that match the query
+substructure. At this point, the <code>rcdk</code> only support the
+former operation - given a query pattern, does it occur or not in a list
+of target molecules. The <code>matches</code> method of this package
+returns a logical vector where the <span class="math inline">\(i\)</span>’th element is <code>TRUE</code> if the
+<span class="math inline">\(i\)</span>’th target molecules contains the
+query substructure. An example of its usage would be to identify
+molecules that contain a carbon atom that has exactly two bonded
+neighbors.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="fu">c</span>(<span class="st">&#39;CC(C)(C)C&#39;</span>,<span class="st">&#39;c1ccc(Cl)cc1C(=O)O&#39;</span>, <span class="st">&#39;CCC(N)(N)CC&#39;</span>))</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="st">&#39;[#6D2]&#39;</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">matches</span>(query, mols)</span></code></pre></div>
@@ -346,29 +685,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="molecular-descriptors" class="section level2">
 <h2>Molecular Descriptors</h2>
-<p>A key requirement for the predictive modeling of molecular properties and activities are <a href="https://en.wikipedia.org/wiki/Molecular_descriptor">molecular descriptors</a> - numerical charaterizations of the molecular structure. The <a href="https://cdk.github.io/">CDK</a> implements a variety of molecular descriptors, categorized into topological, constitutional, geometric, electronic and hybrid. It is possible to evaluate all available descriptors at one go, or evaluate individual descriptors.</p>
+<p>A key requirement for the predictive modeling of molecular properties
+and activities are <a href="https://en.wikipedia.org/wiki/Molecular_descriptor">molecular
+descriptors</a> - numerical characterizations of the molecular
+structure. The <a href="https://cdk.github.io/">CDK</a> implements a
+variety of molecular descriptors, categorized into topological,
+constitutional, geometric, electronic and hybrid. It is possible to
+evaluate all available descriptors at one go, or evaluate individual
+descriptors.</p>
 <p>First, we can take a look at the available descriptor categories.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">get.desc.categories</span>()</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>dc</span></code></pre></div>
-<pre><code>## [1] &quot;hybrid&quot;         &quot;constitutional&quot; &quot;topological&quot;    &quot;electronic&quot;    
-## [5] &quot;geometrical&quot;</code></pre>
-<p>Given the categories we can get the names of the descriptors for a single category. Of course, you can always provide the category name directly.</p>
+<pre><code>## [1] &quot;protein&quot;        &quot;hybrid&quot;         &quot;constitutional&quot; &quot;topological&quot;   
+## [5] &quot;electronic&quot;     &quot;geometrical&quot;</code></pre>
+<p>Given the categories we can get the names of the descriptors for a
+single category. Of course, you can always provide the category name
+directly.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>dn <span class="ot">&lt;-</span> <span class="fu">get.desc.names</span>(dc[<span class="dv">4</span>])</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>dn</span></code></pre></div>
-<pre><code>## [1] &quot;org.openscience.cdk.qsar.descriptors.molecular.FractionalPSADescriptor&quot;     
-## [2] &quot;org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor&quot;              
-## [3] &quot;org.openscience.cdk.qsar.descriptors.molecular.HBondDonorCountDescriptor&quot;   
-## [4] &quot;org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor&quot;
-## [5] &quot;org.openscience.cdk.qsar.descriptors.molecular.CPSADescriptor&quot;              
-## [6] &quot;org.openscience.cdk.qsar.descriptors.molecular.BPolDescriptor&quot;              
-## [7] &quot;org.openscience.cdk.qsar.descriptors.molecular.APolDescriptor&quot;</code></pre>
-<p>Each descriptor name is actually a fully qualified Java class name for the corresponding descriptor. These names can be supplied to <code>eval.desc</code> to evaluate a single or multiple descriptors for one or more molecules.</p>
+<pre><code>##  [1] &quot;org.openscience.cdk.qsar.descriptors.molecular.SmallRingDescriptor&quot;                    
+##  [2] &quot;org.openscience.cdk.qsar.descriptors.molecular.FractionalPSADescriptor&quot;                
+##  [3] &quot;org.openscience.cdk.qsar.descriptors.molecular.ZagrebIndexDescriptor&quot;                  
+##  [4] &quot;org.openscience.cdk.qsar.descriptors.molecular.WienerNumbersDescriptor&quot;                
+##  [5] &quot;org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor&quot;                 
+##  [6] &quot;org.openscience.cdk.qsar.descriptors.molecular.VAdjMaDescriptor&quot;                       
+##  [7] &quot;org.openscience.cdk.qsar.descriptors.molecular.VABCDescriptor&quot;                         
+##  [8] &quot;org.openscience.cdk.qsar.descriptors.molecular.TPSADescriptor&quot;                         
+##  [9] &quot;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanShapeIndexDescriptor&quot;          
+## [10] &quot;org.openscience.cdk.qsar.descriptors.molecular.PetitjeanNumberDescriptor&quot;              
+## [11] &quot;org.openscience.cdk.qsar.descriptors.molecular.MDEDescriptor&quot;                          
+## [12] &quot;org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor&quot;               
+## [13] &quot;org.openscience.cdk.qsar.descriptors.molecular.KappaShapeIndicesDescriptor&quot;            
+## [14] &quot;org.openscience.cdk.qsar.descriptors.molecular.HybridizationRatioDescriptor&quot;           
+## [15] &quot;org.openscience.cdk.qsar.descriptors.molecular.FragmentComplexityDescriptor&quot;           
+## [16] &quot;org.openscience.cdk.qsar.descriptors.molecular.FMFDescriptor&quot;                          
+## [17] &quot;org.openscience.cdk.qsar.descriptors.molecular.EccentricConnectivityIndexDescriptor&quot;   
+## [18] &quot;org.openscience.cdk.qsar.descriptors.molecular.ChiPathDescriptor&quot;                      
+## [19] &quot;org.openscience.cdk.qsar.descriptors.molecular.ChiPathClusterDescriptor&quot;               
+## [20] &quot;org.openscience.cdk.qsar.descriptors.molecular.ChiClusterDescriptor&quot;                   
+## [21] &quot;org.openscience.cdk.qsar.descriptors.molecular.ChiChainDescriptor&quot;                     
+## [22] &quot;org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor&quot;                  
+## [23] &quot;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorPolarizability&quot;
+## [24] &quot;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorMass&quot;          
+## [25] &quot;org.openscience.cdk.qsar.descriptors.molecular.AutocorrelationDescriptorCharge&quot;</code></pre>
+<p>Each descriptor name is actually a fully qualified Java class name
+for the corresponding descriptor. These names can be supplied to
+<code>eval.desc</code> to evaluate a single or multiple descriptors for
+one or more molecules.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>aDesc <span class="ot">&lt;-</span> <span class="fu">eval.desc</span>(mol, dn[<span class="dv">4</span>])</span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>allDescs <span class="ot">&lt;-</span> <span class="fu">eval.desc</span>(mol, dn)</span></code></pre></div>
-<p>The return value of eval.desc is a <code>data.frame</code> with the descriptors in the columns and the molecules in the rows. For the above example we get a single row. But given a list of molecules, we can easily get a descriptor matrix.</p>
-<p>For example, let’s build a linear regression model to predict boiling points for the BP dataset. First we need a set of descriptors and so we evaluate all available descriptors. Also note that since a descriptor might belong to more than one category, we should obtain a unique set of descriptor names</p>
+<p>The return value of eval.desc is a <code>data.frame</code> with the
+descriptors in the columns and the molecules in the rows. For the above
+example we get a single row. But given a list of molecules, we can
+easily get a descriptor matrix.</p>
+<p>For example, let’s build a linear regression model to predict boiling
+points for the BP dataset. First we need a set of descriptors and so we
+evaluate all available descriptors. Also note that since a descriptor
+might belong to more than one category, we should obtain a unique set of
+descriptor names</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>descNames <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">unlist</span>(<span class="fu">sapply</span>(<span class="fu">get.desc.categories</span>(), get.desc.names)))</span></code></pre></div>
-<p>For the current discussion we focus on a few, manually selected descriptors that we know will be related to boiling point.</p>
+<p>For the current discussion we focus on a few, manually selected
+descriptors that we know will be related to boiling point.</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(bpdata)</span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(bpdata[,<span class="dv">1</span>])</span>
 <span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>descNames <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
@@ -380,8 +757,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(descs)</span></code></pre></div>
 <pre><code>## [1] 277  81</code></pre>
-<p>When a descriptor value cannot be computed, it’s value is set to <code>NA</code>. This may happen if a descriptor requires 3D coordinates, but only 2D coordinates are available. In this case, we have manually selected descriptors such that there will be no undefined values.</p>
-<p>Given the ubiquity of certain descriptors, some of them are directly available via their own functions. Specifically, one can calculate <a href="https://pubmed.ncbi.nlm.nih.gov/19149561/">TPSA</a> (topological polar surface area), <a href="https://pubs.acs.org/doi/abs/10.1021/jp980230o">AlogP</a> and <a href="http://www.compchemcons.com/xlogp/xlogp.html">XlogP</a> without having to go through <code>eval.desc</code>. (Note that AlogP and XlogP assume that hydrogens are explicitly specified in the molecule. This may not be true if the molecules were obtained from SMILES)</p>
+<p>When a descriptor value cannot be computed, it’s value is set to
+<code>NA</code>. This may happen if a descriptor requires 3D
+coordinates, but only 2D coordinates are available. In this case, we
+have manually selected descriptors such that there will be no undefined
+values.</p>
+<p>Given the ubiquity of certain descriptors, some of them are directly
+available via their own functions. Specifically, one can calculate <a href="https://pubmed.ncbi.nlm.nih.gov/19149561/">TPSA</a> (topological
+polar surface area), <a href="https://pubs.acs.org/doi/abs/10.1021/jp980230o">AlogP</a> and <a href="http://www.compchemcons.com/xlogp/xlogp.html">XlogP</a> without
+having to go through <code>eval.desc</code>. (Note that AlogP and XlogP
+assume that hydrogens are explicitly specified in the molecule. This may
+not be true if the molecules were obtained from SMILES)</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>mol <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;CC(=O)CC(=O)NCN&#39;</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">convert.implicit.to.explicit</span>(mol)</span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get.tpsa</span>(mol)</span></code></pre></div>
@@ -390,13 +776,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] -0.883</code></pre>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get.alogp</span>(mol)</span></code></pre></div>
 <pre><code>## [1] -1.7019</code></pre>
-<p>Now that we have a descriptor matrix, we easily build a linear regression model. First, remove <code>NA</code>’s, correlated and constant columns. The code is shown below, but since it involves a stochastic element, we will not run it for this example. If we were to perform feature selection, then this type of reduction would have to be performed.</p>
+<p>Now that we have a descriptor matrix, we easily build a linear
+regression model. First, remove <code>NA</code>’s, correlated and
+constant columns. The code is shown below, but since it involves a
+stochastic element, we will not run it for this example. If we were to
+perform feature selection, then this type of reduction would have to be
+performed.</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>descs <span class="ot">&lt;-</span> descs[, <span class="sc">!</span><span class="fu">apply</span>(descs, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">any</span>(<span class="fu">is.na</span>(x)) )]</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>descs <span class="ot">&lt;-</span> descs[, <span class="sc">!</span><span class="fu">apply</span>( descs, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="fu">length</span>(<span class="fu">unique</span>(x)) <span class="sc">==</span> <span class="dv">1</span> )]</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">cor</span>(descs)<span class="sc">^</span><span class="dv">2</span> <span class="sc">&gt;</span> .<span class="dv">6</span>, <span class="at">arr.ind=</span><span class="cn">TRUE</span>)</span>
 <span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> r2[ r2[,<span class="dv">1</span>] <span class="sc">&gt;</span> r2[,<span class="dv">2</span>] , ]</span>
 <span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>descs <span class="ot">&lt;-</span> descs[, <span class="sc">-</span><span class="fu">unique</span>(r2[,<span class="dv">2</span>])]</span></code></pre></div>
-<p>Note that the above correlation reduction step is pretty crude and there are better ways to do it. Given the reduced descriptor matrix, we can perform feature selection (say using <a href="https://CRAN.R-project.org/package=leaps">leaps</a>, <a href="https://CRAN.R-project.org/package=caret">caret</a> or a <a href="https://CRAN.R-project.org/package=GenAlgo">GA</a> to identify a suitable subset of descriptors. Given that we selected the descriptors by hand, we can skip this section, and directly build the model and generate a plot of predicte versus observed BP. (Note that this is a toy example and is not an example of good QSAR practice!)</p>
+<p>Note that the above correlation reduction step is pretty crude and
+there are better ways to do it. Given the reduced descriptor matrix, we
+can perform feature selection (say using <a href="https://CRAN.R-project.org/package=leaps">leaps</a>, <a href="https://CRAN.R-project.org/package=caret">caret</a> or a <a href="https://CRAN.R-project.org/package=GenAlgo">GA</a> to identify a
+suitable subset of descriptors. Given that we selected the descriptors
+by hand, we can skip this section, and directly build the model and
+generate a plot of predicted versus observed BP. (Note that this is a
+toy example and is not an example of good QSAR practice!)</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(BP <span class="sc">~</span> khs.sCH3 <span class="sc">+</span> khs.sF <span class="sc">+</span> apol <span class="sc">+</span> nHBDon, <span class="fu">data.frame</span>(bpdata, descs))</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
 <pre><code>## 
@@ -429,20 +826,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="fingerprints" class="section level2">
 <h2>Fingerprints</h2>
-<p>Fingerprints are a common representation used for a variety of purposes such as similarity searching and predictive modeling. The <a href="https://cdk.github.io/">CDK</a> provides a variety of fingerprints ranging from path-based hashed fingerprints to circular (specifically, an implementation fo the <a href="https://pubs.acs.org/doi/abs/10.1021/ci100050t">ECFP</a> fingerprints) and signature fingerprints (based on the <a href="https://pubs.acs.org/doi/abs/10.1021/ci020345w">signature</a> molecular descriptor). Some of the fingerprints are represented as binary strings and other by integer vectors. The <code>rcdk</code> employs the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a> package to support operations on the resultant fingerprints.</p>
-<p>In this section, we present an example of using fingerprints to generate a hierarchical clustering of a set of molecules from the included boiling point dataset. We first parse the SMILES for the molecules in the dataset and then compute the fingerprints, specifying the <code>circular</code> type.</p>
+<p>Fingerprints are a common representation used for a variety of
+purposes such as similarity searching and predictive modeling. The <a href="https://cdk.github.io/">CDK</a> provides a variety of fingerprints
+ranging from path-based hashed fingerprints to circular (specifically,
+an implementation fo the <a href="https://pubs.acs.org/doi/abs/10.1021/ci100050t">ECFP</a>
+fingerprints) and signature fingerprints (based on the <a href="https://pubs.acs.org/doi/abs/10.1021/ci020345w">signature</a>
+molecular descriptor). Some of the fingerprints are represented as
+binary strings and other by integer vectors. The <code>rcdk</code>
+employs the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a>
+package to support operations on the resultant fingerprints.</p>
+<p>In this section, we present an example of using fingerprints to
+generate a hierarchical clustering of a set of molecules from the
+included boiling point dataset. We first parse the SMILES for the
+molecules in the dataset and then compute the fingerprints, specifying
+the <code>circular</code> type.</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(bpdata)</span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(bpdata[,<span class="dv">1</span>])</span>
 <span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>fps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(mols, get.fingerprint, <span class="at">type=</span><span class="st">&#39;circular&#39;</span>)</span></code></pre></div>
-<p>With the fingerprints, we can then compute a pairwise similarity matrix using the <a href="https://en.wikipedia.org/wiki/Chemical_similarity">Tanimoto</a> metric. Since R’s <code>hclust</code> method requires a distance matrix, we convert the similarity matrix to a distance matrix</p>
+<p>With the fingerprints, we can then compute a pairwise similarity
+matrix using the <a href="https://en.wikipedia.org/wiki/Chemical_similarity">Tanimoto</a>
+metric. Since R’s <code>hclust</code> method requires a distance matrix,
+we convert the similarity matrix to a distance matrix</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>fp.sim <span class="ot">&lt;-</span> fingerprint<span class="sc">::</span><span class="fu">fp.sim.matrix</span>(fps, <span class="at">method=</span><span class="st">&#39;tanimoto&#39;</span>)</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>fp.dist <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> fp.sim</span></code></pre></div>
-<p>Finally, we can perform the clustering. In this case we use the <code>hclust</code> method though any of R’s clustering methods could be used.</p>
+<p>Finally, we can perform the clustering. In this case we use the
+<code>hclust</code> method though any of R’s clustering methods could be
+used.</p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>cls <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="fu">as.dist</span>(fp.dist))</span>
 <span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cls, <span class="at">main=</span><span class="st">&#39;A Clustering of the BP dataset&#39;</span>, <span class="at">labels=</span><span class="cn">FALSE</span>)</span></code></pre></div>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAYAAAAUg66AAAAEDmlDQ1BrQ0dDb2xvclNwYWNlR2VuZXJpY1JHQgAAOI2NVV1oHFUUPpu5syskzoPUpqaSDv41lLRsUtGE2uj+ZbNt3CyTbLRBkMns3Z1pJjPj/KRpKT4UQRDBqOCT4P9bwSchaqvtiy2itFCiBIMo+ND6R6HSFwnruTOzu5O4a73L3PnmnO9+595z7t4LkLgsW5beJQIsGq4t5dPis8fmxMQ6dMF90A190C0rjpUqlSYBG+PCv9rt7yDG3tf2t/f/Z+uuUEcBiN2F2Kw4yiLiZQD+FcWyXYAEQfvICddi+AnEO2ycIOISw7UAVxieD/Cyz5mRMohfRSwoqoz+xNuIB+cj9loEB3Pw2448NaitKSLLRck2q5pOI9O9g/t/tkXda8Tbg0+PszB9FN8DuPaXKnKW4YcQn1Xk3HSIry5ps8UQ/2W5aQnxIwBdu7yFcgrxPsRjVXu8HOh0qao30cArp9SZZxDfg3h1wTzKxu5E/LUxX5wKdX5SnAzmDx4A4OIqLbB69yMesE1pKojLjVdoNsfyiPi45hZmAn3uLWdpOtfQOaVmikEs7ovj8hFWpz7EV6mel0L9Xy23FMYlPYZenAx0yDB1/PX6dledmQjikjkXCxqMJS9WtfFCyH9XtSekEF+2dH+P4tzITduTygGfv58a5VCTH5PtXD7EFZiNyUDBhHnsFTBgE0SQIA9pfFtgo6cKGuhooeilaKH41eDs38Ip+f4At1Rq/sjr6NEwQqb/I/DQqsLvaFUjvAx+eWirddAJZnAj1DFJL0mSg/gcIpPkMBkhoyCSJ8lTZIxk0TpKDjXHliJzZPO50dR5ASNSnzeLvIvod0HG/mdkmOC0z8VKnzcQ2M/Yz2vKldduXjp9bleLu0ZWn7vWc+l0JGcaai10yNrUnXLP/8Jf59ewX+c3Wgz+B34Df+vbVrc16zTMVgp9um9bxEfzPU5kPqUtVWxhs6OiWTVW+gIfywB9uXi7CGcGW/zk98k/kmvJ95IfJn/j3uQ+4c5zn3Kfcd+AyF3gLnJfcl9xH3OfR2rUee80a+6vo7EK5mmXUdyfQlrYLTwoZIU9wsPCZEtP6BWGhAlhL3p2N6sTjRdduwbHsG9kq32sgBepc+xurLPW4T9URpYGJ3ym4+8zA05u44QjST8ZIoVtu3qE7fWmdn5LPdqvgcZz8Ww8BWJ8X3w0PhQ/wnCDGd+LvlHs8dRy6bLLDuKMaZ20tZrqisPJ5ONiCq8yKhYM5cCgKOu66Lsc0aYOtZdo5QCwezI4wm9J/v0X23mlZXOfBjj8Jzv3WrY5D+CsA9D7aMs2gGfjve8ArD6mePZSeCfEYt8CONWDw8FXTxrPqx/r9Vt4biXeANh8vV7/+/16ffMD1N8AuKD/A/8leAvFY9bLAAAAOGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAACoAIABAAAAAEAAAEgoAMABAAAAAEAAAEgAAAAAKtAJY0AAEAASURBVHgB7Z0FmC21FceDu7uVh7tb8QfFobhT4OFatEiRYgUKFCvuVihS3KG4eynu7u7ONL/QM82dzdjda9l3zvftztxMJsmcTP45lswwiSWjpBxQDigHusCBYbtQp1apHFAOKAccBxSA9EVQDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusYBBaCusV4rVg4oBxSA9B1QDigHusaB4btV87bbbmueffZZV/12221n1lhjjaaactlllxn+Hn/8cfPWW2+Zaaed1sw999xm7733NlNMMUVDmYcffri54YYbXNq//vUvM+yw7cffn3/+2Tz55JNm9tlnb2hLK35043la0W7KePjhh81+++3njqOPPrpZcMEFzd///vfc4kN8/Mtf/mJuuukmd8+tt96ae2+rLhx99NHm6quv7lPc8MMPb0YddVQz88wzm0022cRMN910aZ6PPvrIrLXWWulvToYZZhgz4ogjmtFGG83MMMMMZrfddjNjjz12Q546P9577z2z3nrruVs22mgjM2TIkDq3p3lDPE4vtusk6QK9+OKLie2ExD6T+5t//vlrt+LTTz9N1l9//bQMKUuO9qVOLrroooZybcek+X/88ceGa+34cc899yTzzDNPssEGG7Sj+KTTz9Oqh/j888+TccYZJ+0L+uw3v/lNbvF5fLSDLS0j9+YWXth6663T+uQ9yx5HGGGE5Prrr09rtZNi6T2TTTZZcsstt6T31D159dVX0zr23Xffure7/Hk8bqqwGjd1RQI688wzjW2j7btf6MEHH3QSzBxzzCFJpcetttrKWIBx+aaZZhqz5pprmpFHHtlJQ0888YT58ssvDVLWMsss06/ZpbQhBRkWXnhhd3XGGWcsyNX8pbnmmst8/PHHrgBm1Vjo+eefN5988olrLhLDIYcc0vA+ZJ+j3XzM1lfl98Ybb2wmmGAC1247mZlHH33U3HXXXeaHH34wSCFIJdk+4T1dbrnlzE8//WS+/vprc/PNN5t33nnHSe6///3vzVNPPVWl6rbk6RqPa4BVS7IieUw66aQOsUF+y033t80221Qu/84770zvW2SRRRJmVJ/sy5Fet+JteqmVEoN90RJmnpdeein56quv0jr8E3m2Ignos88+S15//XX/tsLzN954o/B66KIVrV1bv/vuu9DlNO39999PLDCkv5s9oY9ffvnlJE/KvPLKK9P+ufjii0uryeNjSAKi/Xbwl5ZZl+8U6EtAVuXvU4edBNPnsmDirvsSENd94r2xk256DzyrSvSVVe9c9jIJiPHx3HPPuT6xwBesIo/HkrlKGZIX7cSaV1w/WLCV5OARBO8oWR06ZfhJJ52UzDrrrO73mGOOmVippVJbVltttbSM++67r889vIBWQkrOPfdcN/AkQwiArO6cWF08sbOZZHPHO+64w6Vz7bzzzkuvvfvuu8mGG26YWL0/bQPq5FJLLZUCibVvuHulU8lLOccdd1xazr333pvMNttsqSpqbQDJjjvumHz77bcNebiPv2uuuSaZfvrpXZ3WtuVePp5RrstgBxAlDV7/6U9/SsYbbzx3n7U7OLUty2eeVcq2drFkgQUWcC8r91HWwQcfnLap6ATVw87wyRhjjOHqG2mkkRxfePmFllxyyYR04Q3n1GFtc5IlPZbx0Qcg6qDdotpbO0xy9913p2XJSRW+S97ssQyANt98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UUYZJXQ5N23vvfc2wwwzTO71ogvffPONueuuu8zkk09utt9+ezP99NP3yU6es846y5x99tl9roUSAA/aVIX/ww8/vHnzzTf75OXeCSaYoCEdfiL5QLw3SEe+xDjGGGO0RIIOPVO301QCanEP8OL8+te/NhtuuKErmRdrvPHGc9IICeedd565++67zcILL9zimttf3BlnnGF23HFHNwjr1LbLLrs4IGHmzxIq0htvvJFNNk899ZS55pprDNJBlhZYYAGz2WabZZMbfq+//vrmwQcfdPXOMMMM5sorrzQrr7xyQ56iH4cccog54ogjGgY+Kh3qHJKjT0haN998s1lqqaX85Ernr732mhk0aJB7R7iBOlDfkKQg1OhpppnGoMYORFIAanGvItYj5Zx77rnBkt95551Cm0ToJmZS1A5sELycDADqefnll4Oqw/vvv+8A8LvvvjO33nqrWXLJJUPF1k5jcGy++ebmz3/+c+17825AwkENGnbYav4QbFq0oQyAPvvsMwf2PPsf//hHB2h1AAi+IRkBdmVEvuuuu64pAAK85ptvPgeWUg98PvDAA52qhnR04YUXmj333NNdBphQGZuVDKWOXjkqAHWgJ3w1iBfuzjvvNKhTELNzaJb3m/X000+bueaay0kEkr7gggsaygrZcAAmAGvIkCHODtEqAJK6W3nErsKAqqqeMTi32WabVjYhWNYII4zgjNNZacfPjPQy//zzm9FGG8389NNP5vTTTzf33XefmWWWWQwTDeCBxDTqqKP6t5We4wQ54IADzKGHHupU19133z29BzCdZ555zGyzzZamxXyiANTm3jv++OPNP/7xDzPppJO6mrBJ4Ml6/PHHnd5/4403Ok8NUtOEE06Y2xo8TP5gwMZQROOMM47Bo4fdgsHhe12K7uvkNdQK2gbAMqiyBNjAv9dffz29hATEs//hD39I0zhBjcHQXVWS4h68idSPpNiMlxIjM7Yl7IEQDgKcDosttpjZYYcdXNpqq61m6GMI+w4eMMDp0UcfNXPPPbdLD/0DZEXqQZq7/fbbXTY8dkhnTDLTTTedwasWMxW/xTE/WY+0HXUIo/Of/vSntEWoT8yweFYAHl7Sl156yRkesRe1iuTFx9gqbt5Wld2KcpD+GKzzzjuvwbWNJOET0gQ2J2wxPmGfydLRRx/tysH+VpXwJqLSYlj+61//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ABR192njlQNxc0ABKO7+09YrB6LmgAJQ1N2njVcOxM0BBaC4+09brxyImgMKQFF3nzZeORA3BxSA4u4/bb1yIGoOKABF3X3aeOVA3BxQAIq7/7T1yoGoOaAAFHX3aeOVA3FzQAEo7v7T1isHouaAAlDU3aeNVw7EzQEFoLj7T1uvHIiaAwpAUXefNl45EDcHFIDi7j9tvXIgag4oAEXdfdp45UDcHFAAirv/tPXKgag5oAAUdfdp45UDcXNAASju/tPWKwei5oACUNTdp41XDsTNAQWguPtPW68ciJoDCkBRd582XjkQNwcUgOLuP229ciBqDigARd192njlQNwcUACKu/+09cqBqDmgABR192njlQNxc0ABKO7+09YrB6LmgAJQ1N2njVcOxM0BBaC4+09brxyImgMKQFF3nzZeORA3BxSA4u4/bb1yIGoOKABF3X3aeOVA3BxQAIq7/7T1yoGoOaAAFHX3aeOVA3FzQAEo7v7T1isHouaAAlDU3aeNVw7EzQEFoLj7b0C1/umnnzZJkqTP9MMPP5iXXnrJfPHFF2lar528+eab5rPPPuu1ZkXTHgWgaLqqdxp7Du4iAAAPwElEQVQ63HDDmZNPPtk1aMsttzTzzDNP5cZ9+OGH5uyzz+6T/7rrrjN77LGHGWaYYdy18847z4w11lhm2mmnNXvvvXef/P1JaGX7H374YbPZZpv1pzlD9b0KQEN19/f/4RdeeGGz8sorVy5oq622MhdffHFD/p9//tnstdde5vDDD0/T//znP5t5553XPPPMM2b//fdP01t90t/2r7rqqubdd981999/f6ubNlSUN/xQ8ZT6kG3jwMYbb1yrbMBGpBy5EWln4oknNjPNNJMkmffee89Q9owzzpimteOkFe3fYYcdzO67727uvPPOdjRxQJepEtAA6t4rrrjCLLLIImbcccc1k0wyiVlhhRXMs88+mz7hQw89ZBZffHEzxhhjmKmmmspssskm5pNPPkmvh05ee+01s+mmmzqAQNW6+eabG7IdfPDBZsMNN0zTiupgoN5+++3m7rvvdtLNO++8Y77//nuz7777mtVWW82V8cILL7hrX375pTnppJPc+eeff24OOuggs+eee5q//e1vZrrppjPTTDON2XXXXc1XX32V1h06aXf7qRM+P/jgg+baa68NNUHTCjigElABc2K6dOml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" /><!-- --></p>
-<p>Another common task for fingerprints is similarity searching. That is, given a collection of <em>target</em> molecules, find those molecules that are similar to a <em>query</em> molecule. This is achieved by evaluating a similarity metric between the query and each of the target molecules. Those target molecules exceeding a user defined cutoff will be returned. With the help of the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a> package this is easily accomplished.</p>
-<p>For example, we can identify all the molecules in the BP dataset that have a Tanimoto similarity of 0.3 or more with acetalehyde, and then create a tabular summary. Note that this could also be accomplished with molecular descriptors, in which case you’d probably evaluate the Euclidean distance between descriptor vectors.</p>
+<p>Another common task for fingerprints is similarity searching. That
+is, given a collection of <em>target</em> molecules, find those
+molecules that are similar to a <em>query</em> molecule. This is
+achieved by evaluating a similarity metric between the query and each of
+the target molecules. Those target molecules exceeding a user defined
+cutoff will be returned. With the help of the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a>
+package this is easily accomplished.</p>
+<p>For example, we can identify all the molecules in the BP dataset that
+have a Tanimoto similarity of 0.3 or more with acetalehyde, and then
+create a tabular summary. Note that this could also be accomplished with
+molecular descriptors, in which case you’d probably evaluate the
+Euclidean distance between descriptor vectors.</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>query.mol <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(<span class="st">&#39;CC(=O)&#39;</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>target.mols <span class="ot">&lt;-</span> <span class="fu">parse.smiles</span>(bpdata[,<span class="dv">1</span>])</span>
 <span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>query.fp <span class="ot">&lt;-</span> <span class="fu">get.fingerprint</span>(query.mol, <span class="at">type=</span><span class="st">&#39;circular&#39;</span>)</span>
