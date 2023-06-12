@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Zaachary Charlop-Powers" />
+
+<meta name="date" content="2023-06-11" />
+
+<title>Performance Notes</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Performance Notes</h1>
+<h4 class="author">Zaachary Charlop-Powers</h4>
+<h4 class="date">2023-06-11</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#rcdk-performance" id="toc-rcdk-performance">rCDK
+Performance</a></li>
+<li><a href="#results" id="toc-results">Results</a></li>
+</ul>
+</div>
+
+<div id="rcdk-performance" class="section level2">
+<h2>rCDK Performance</h2>
+<p>In September 2022, of this year, <a href="https://gist.github.com/sneumann">Stepehn Neumann</a> <a href="https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673">created
+a benchmark</a> for moecular weight calculation that he <a href="https://twitter.com/sneumannoffice/status/1570070283083710465?s=20&amp;t=RqJR3Bbh-DEcbCf2tWUEBQ">announced
+on twitter</a> showing that rCDK had dismal performance relative to
+other tools in the R ecosystem. Something seemed a bit off so I looked
+into the code.</p>
+<p>What I discovered is that the mass spec calculations were mediated by
+R classes instead of accessing the underlying Java code directly and if
+you write a function that does that you get a speedup, and if you avoid
+reflection by creating static calls then you get a really fast
+function.</p>
+<p>This is a good example of how to think about using Java from within R
+where the use of the helper rJava functions, <code>J</code> and
+<code>$</code> allow you to prototype code and benefit from reflection
+so you can code sort of like you would in R. Then, if you need
+performance, you can tighten down the code a bit by making the calls
+static. You can see that progression in the code below which is
+accompanied by the outputs from those benchmarks.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">will</span> give <span class="er">(</span><span class="ex">2/3</span><span class="kw">)</span> <span class="ex">runtime</span> in µs:</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>   <span class="ex">21</span> OrgMassSpecR </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="ex">163</span> MetaboCoreUtils</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="ex">197</span> enviPat </span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="ex">545</span> Rdisop </span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="ex">645</span> CHNOSZ </span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a> <span class="ex">4863</span> ChemmineR </span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">22510</span> rcdk</span></code></pre></div>
+<p><a href="https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673" class="uri">https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673</a>
+## Benchmark</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Bioconductor Packages. Use BiocManager::install()</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#   Rdisop MetaboCoreUtils ChemmineR ChemmineOB enviPat</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(CHNOSZ)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">library</span>(enviPat)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">library</span>(MetaboCoreUtils)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">library</span>(rcdk)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">library</span>(ChemmineR)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">library</span>(OrgMassSpecR)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">library</span>(Rdisop)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#library(ChemmineOB)</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="fu">data</span>(isotopes)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co"># original</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co"># https://github.com/CDK-R/cdkr/blob/master/rcdk/R/formula.R</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co"># get.formula &lt;- function(mf, charge=0) {</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#   manipulator &lt;- get(&quot;mfManipulator&quot;, envir = .rcdk.GlobalEnv)</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#   if(!is.character(mf)) {</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#     stop(&quot;Must supply a Formula string&quot;);</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#   }else{</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#     dcob &lt;- .cdkFormula.createChemObject()</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#     molecularformula &lt;- .cdkFormula.createFormulaObject()</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#     molecularFormula &lt;- .jcall(manipulator,</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#                                &quot;Lorg/openscience/cdk/interfaces/IMolecularFormula;&quot;,</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#                                &quot;getMolecularFormula&quot;,</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#                                mf,</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#                                .jcast(molecularformula,.IMolecularFormula),</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#                                TRUE);</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#   }</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#   D &lt;- new(J(&quot;java/lang/Integer&quot;), as.integer(charge))</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#   .jcall(molecularFormula,&quot;V&quot;,&quot;setCharge&quot;,D);</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#   object &lt;- .cdkFormula.createObject(.jcast(molecularFormula,.IMolecularFormula));</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#   return(object);</span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>mfManipulator    <span class="ot">&lt;-</span> <span class="fu">J</span>(<span class="st">&quot;org/openscience/cdk/tools/manipulator/MolecularFormulaManipulator&quot;</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>silentchemobject <span class="ot">&lt;-</span> <span class="fu">J</span>(<span class="st">&quot;org.openscience.cdk.silent.SilentChemObjectBuilder&quot;</span>)</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&#39; Rewrite the formual object and directly access Java</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>get.formula2 <span class="ot">&lt;-</span> <span class="cf">function</span>(mf) {</span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>  </span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>  formula <span class="ot">&lt;-</span> mfManipulator<span class="sc">$</span><span class="fu">getMolecularFormula</span>(</span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>    <span class="st">&quot;C2H3&quot;</span>, </span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>    silentchemobject<span class="sc">$</span><span class="fu">getInstance</span>())</span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>  </span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>  mfManipulator<span class="sc">$</span><span class="fu">getMass</span>(formula)</span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>  </span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>}</span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&#39; Add type hints</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a>get.formula3 <span class="ot">&lt;-</span> <span class="cf">function</span>(mf) {</span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a>  builderinstance <span class="ot">&lt;-</span> <span class="fu">.jcall</span>(</span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>      silentchemobject,</span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>     <span class="st">&quot;Lorg/openscience/cdk/interfaces/IChemObjectBuilder;&quot;</span>,</span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>     <span class="st">&quot;getInstance&quot;</span>)</span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>                       </span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>  formula  <span class="ot">&lt;-</span> <span class="fu">.jcall</span>(</span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>      mfManipulator,</span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>     <span class="st">&quot;Lorg/openscience/cdk/interfaces/IMolecularFormula;&quot;</span>,</span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a>     <span class="st">&quot;getMolecularFormula&quot;</span>,</span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a>      mf,</span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>      builderinstance);</span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>  mfManipulator<span class="sc">$</span><span class="fu">getMass</span>(formula)</span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>  </span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>}</span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a><span class="co">#&#39; Add type hints</span></span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a>get.formula4 <span class="ot">&lt;-</span> <span class="cf">function</span>(mf) {</span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a>  builderinstance <span class="ot">&lt;-</span> <span class="fu">.jcall</span>(</span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a>      silentchemobject,</span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a>      <span class="st">&quot;Lorg/openscience/cdk/interfaces/IChemObjectBuilder;&quot;</span>,</span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a>      <span class="st">&quot;getInstance&quot;</span>)</span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a></span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a>  formula  <span class="ot">&lt;-</span> <span class="fu">.jcall</span>(</span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a>      mfManipulator,</span>
+<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a>     <span class="st">&quot;Lorg/openscience/cdk/interfaces/IMolecularFormula;&quot;</span>,</span>
+<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a>     <span class="st">&quot;getMolecularFormula&quot;</span>,</span>
+<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a>     mf,</span>
+<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a>     builderinstance);</span>
+<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a>  <span class="fu">.jcall</span>(</span>
+<span id="cb2-93"><a href="#cb2-93" tabindex="-1"></a>      mfManipulator,</span>
+<span id="cb2-94"><a href="#cb2-94" tabindex="-1"></a>      <span class="st">&quot;D&quot;</span>,</span>
+<span id="cb2-95"><a href="#cb2-95" tabindex="-1"></a>      <span class="st">&quot;getMass&quot;</span>,</span>
+<span id="cb2-96"><a href="#cb2-96" tabindex="-1"></a>     formula)</span>
+<span id="cb2-97"><a href="#cb2-97" tabindex="-1"></a>}</span>
+<span id="cb2-98"><a href="#cb2-98" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" tabindex="-1"></a></span>
+<span id="cb2-100"><a href="#cb2-100" tabindex="-1"></a></span>
+<span id="cb2-101"><a href="#cb2-101" tabindex="-1"></a>benchmark <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb2-102"><a href="#cb2-102" tabindex="-1"></a>  <span class="at">MetaboCoreUtils =</span> MetaboCoreUtils<span class="sc">::</span><span class="fu">calculateMass</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-103"><a href="#cb2-103" tabindex="-1"></a>  <span class="at">rcdk =</span> rcdk<span class="sc">::</span><span class="fu">get.formula</span>(<span class="st">&quot;C2H6O&quot;</span>, <span class="at">charge =</span> <span class="dv">0</span>)<span class="sc">@</span>mass,</span>
+<span id="cb2-104"><a href="#cb2-104" tabindex="-1"></a>  <span class="at">rcdk2 =</span> <span class="fu">get.formula2</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-105"><a href="#cb2-105" tabindex="-1"></a>  <span class="at">rcdk3 =</span> <span class="fu">get.formula3</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-106"><a href="#cb2-106" tabindex="-1"></a>  <span class="at">rcdk4 =</span> <span class="fu">get.formula4</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-107"><a href="#cb2-107" tabindex="-1"></a>  <span class="at">Rdisop =</span> Rdisop<span class="sc">::</span><span class="fu">getMolecule</span>(<span class="st">&quot;C2H6O&quot;</span>)<span class="sc">$</span>exactmass,</span>
+<span id="cb2-108"><a href="#cb2-108" tabindex="-1"></a>  <span class="at">ChemmineR =</span> ChemmineR<span class="sc">::</span><span class="fu">exactMassOB</span>(ChemmineR<span class="sc">::</span><span class="fu">smiles2sdf</span>(<span class="st">&quot;CCO&quot;</span>)),</span>
+<span id="cb2-109"><a href="#cb2-109" tabindex="-1"></a>  <span class="at">OrgMassSpecR =</span> OrgMassSpecR<span class="sc">::</span><span class="fu">MonoisotopicMass</span>(<span class="at">formula =</span> OrgMassSpecR<span class="sc">::</span><span class="fu">ListFormula</span>(<span class="st">&quot;C2H6O)&quot;</span>), <span class="at">charge =</span> <span class="dv">0</span>),</span>
+<span id="cb2-110"><a href="#cb2-110" tabindex="-1"></a>  </span>
+<span id="cb2-111"><a href="#cb2-111" tabindex="-1"></a>  <span class="at">CHNOSZ =</span> CHNOSZ<span class="sc">::</span><span class="fu">mass</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-112"><a href="#cb2-112" tabindex="-1"></a>  <span class="at">enviPat =</span> enviPat<span class="sc">::</span><span class="fu">isopattern</span>(isotopes, <span class="st">&quot;C2H6O&quot;</span>, <span class="at">charge=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb2-113"><a href="#cb2-113" tabindex="-1"></a>  , <span class="at">times=</span>1000L)</span>
+<span id="cb2-114"><a href="#cb2-114" tabindex="-1"></a></span>
+<span id="cb2-115"><a href="#cb2-115" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" tabindex="-1"></a>masses <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-117"><a href="#cb2-117" tabindex="-1"></a>  <span class="at">MetaboCoreUtils=</span>MetaboCoreUtils<span class="sc">::</span><span class="fu">calculateMass</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-118"><a href="#cb2-118" tabindex="-1"></a>  <span class="at">rcdk=</span>rcdk<span class="sc">::</span><span class="fu">get.formula</span>(<span class="st">&quot;C2H6O&quot;</span>, <span class="at">charge =</span> <span class="dv">0</span>)<span class="sc">@</span>mass,</span>
+<span id="cb2-119"><a href="#cb2-119" tabindex="-1"></a>  <span class="at">Rdisop=</span>Rdisop<span class="sc">::</span><span class="fu">getMolecule</span>(<span class="st">&quot;C2H6O&quot;</span>)<span class="sc">$</span>exactmass,</span>
+<span id="cb2-120"><a href="#cb2-120" tabindex="-1"></a>  <span class="co">#ChemmineR=ChemmineR::exactMassOB(ChemmineR::smiles2sdf(&quot;CCO&quot;)),</span></span>
+<span id="cb2-121"><a href="#cb2-121" tabindex="-1"></a>  <span class="at">OrgMassSpecR=</span>OrgMassSpecR<span class="sc">::</span><span class="fu">MonoisotopicMass</span>(<span class="at">formula =</span> OrgMassSpecR<span class="sc">::</span><span class="fu">ListFormula</span>(<span class="st">&quot;C2H6O)&quot;</span>), <span class="at">charge =</span> <span class="dv">0</span>),</span>
+<span id="cb2-122"><a href="#cb2-122" tabindex="-1"></a>  <span class="at">CHNOSZ=</span>CHNOSZ<span class="sc">::</span><span class="fu">mass</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
+<span id="cb2-123"><a href="#cb2-123" tabindex="-1"></a>  <span class="at">enviPat=</span>enviPat<span class="sc">::</span><span class="fu">isopattern</span>(isotopes, <span class="st">&quot;C2H6O&quot;</span>, <span class="at">charge=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb2-124"><a href="#cb2-124" tabindex="-1"></a>)</span>
+<span id="cb2-125"><a href="#cb2-125" tabindex="-1"></a></span>
+<span id="cb2-126"><a href="#cb2-126" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">10</span>)</span>
+<span id="cb2-127"><a href="#cb2-127" tabindex="-1"></a><span class="fu">t</span>(<span class="fu">t</span>(<span class="fu">sort</span>(masses)))</span>
+<span id="cb2-128"><a href="#cb2-128" tabindex="-1"></a><span class="fu">summary</span>(benchmark)[<span class="fu">order</span>(<span class="fu">summary</span>(benchmark)[,<span class="st">&quot;median&quot;</span>]) , ]</span>
+<span id="cb2-129"><a href="#cb2-129" tabindex="-1"></a>clipr<span class="sc">::</span><span class="fu">write_clip</span>(<span class="fu">as.data.frame</span>(<span class="fu">summary</span>(benchmark)[<span class="fu">order</span>(<span class="fu">summary</span>(benchmark)[,<span class="st">&quot;median&quot;</span>]) , ] ))</span></code></pre></div>
+</div>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<pre class="shell"><code>              expr       min         lq         mean     median         uq
+1  MetaboCoreUtils    69.479   122.8465   154.049427   139.6495   156.2700
+10         enviPat    83.250   143.0935   170.429197   160.5360   179.6570
+5            rcdk4   175.889   228.8605   324.182735   271.2955   327.7135
+8     OrgMassSpecR   249.287   333.3135   392.479869   357.6665   401.5585
+6           Rdisop   382.417   459.8790   538.068697   490.1505   557.9975
+9           CHNOSZ   355.145   510.2910   588.186951   555.9165   632.2060
+4            rcdk3   781.987  1004.7160  1294.507318  1133.3415  1339.4695
+3            rcdk2  2078.465  2392.4950  2920.601088  2612.8025  2931.5465
+7        ChemmineR  3227.320  3790.0455  4808.783873  4044.1410  4465.1000
+2             rcdk 14823.815 16456.7715 19088.569430 17485.0800 19468.7195</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
