@@ -12,7 +12,7 @@
 
 <meta name="author" content="Rajarshi Guha" />
 
-<meta name="date" content="2023-06-11" />
+<meta name="date" content="2023-06-29" />
 
 <title>Using the CDK from R</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Using the CDK from R</h1>
 <h4 class="author">Rajarshi Guha</h4>
-<h4 class="date">2023-06-11</h4>
+<h4 class="date">2023-06-29</h4>
 
 
 <div id="TOC">
@@ -764,7 +764,7 @@ have manually selected descriptors such that there will be no undefined
 values.</p>
 <p>Given the ubiquity of certain descriptors, some of them are directly
 available via their own functions. Specifically, one can calculate <a href="https://pubmed.ncbi.nlm.nih.gov/19149561/">TPSA</a> (topological
-polar surface area), <a href="https://www.doi.org/10.1021/jp980230o">AlogP</a> and <a href="http://www.compchemcons.com/xlogp/xlogp.html">XlogP</a> without
+polar surface area), <a href="https://pubs.acs.org/doi/abs/10.1021/jp980230o">AlogP</a> and <a href="http://www.compchemcons.com/xlogp/xlogp.html">XlogP</a> without
 having to go through <code>eval.desc</code>. (Note that AlogP and XlogP
 assume that hydrogens are explicitly specified in the molecule. This may
 not be true if the molecules were obtained from SMILES)</p>
@@ -829,10 +829,11 @@ toy example and is not an example of good QSAR practice!)</p>
 <p>Fingerprints are a common representation used for a variety of
 purposes such as similarity searching and predictive modeling. The <a href="https://cdk.github.io/">CDK</a> provides a variety of fingerprints
 ranging from path-based hashed fingerprints to circular (specifically,
-an implementation fo the <a href="https://www.doi.org/10.1021/ci100050t">ECFP</a> fingerprints) and
-signature fingerprints (based on the <a href="https://www.doi.org/10.1021/ci020345w">signature</a> molecular
-descriptor). Some of the fingerprints are represented as binary strings
-and other by integer vectors. The <code>rcdk</code> employs the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a>
+an implementation fo the <a href="https://pubs.acs.org/doi/abs/10.1021/ci100050t">ECFP</a>
+fingerprints) and signature fingerprints (based on the <a href="https://pubs.acs.org/doi/abs/10.1021/ci020345w">signature</a>
+molecular descriptor). Some of the fingerprints are represented as
+binary strings and other by integer vectors. The <code>rcdk</code>
+employs the <a href="https://CRAN.R-project.org/package=fingerprint">fingerprint</a>
 package to support operations on the resultant fingerprints.</p>
 <p>In this section, we present an example of using fingerprints to
 generate a hierarchical clustering of a set of molecules from the
