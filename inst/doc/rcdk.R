@@ -8,36 +8,36 @@ cdk.version()
 data(bpdata)
 str(bpdata)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  mols <- load.molecules( c('data1.sdf', '/some/path/data2.sdf') )
+## ----eval=FALSE---------------------------------------------------------------
+# mols <- load.molecules( c('data1.sdf', '/some/path/data2.sdf') )
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  iter <- iload.molecules('verybig.sdf', type='sdf')
-#  while(hasNext(iter)) {
-#   mol <- nextElem(iter)
-#   print(get.property(mol, "cdk:Title"))
-#  }
+# iter <- iload.molecules('verybig.sdf', type='sdf')
+# while(hasNext(iter)) {
+#  mol <- nextElem(iter)
+#  print(get.property(mol, "cdk:Title"))
+# }
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  smile <- 'c1ccccc1CC(=O)C(N)CC1CCCCOC1'
-#  mol <- parse.smiles(smile)[[1]]
+# smile <- 'c1ccccc1CC(=O)C(N)CC1CCCCOC1'
+# mol <- parse.smiles(smile)[[1]]
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  options("java.parameters"=c("-Xmx4000m"))
-#  library(rcdk)
-#  for (smile in smiles) {
-#      m <- parse.smiles(smile)
-#      ## perform operations on this molecule
-#  
-#      jcall("java/lang/System","V","gc")
-#      gc()
-#  }
+# options("java.parameters"=c("-Xmx4000m"))
+# library(rcdk)
+# for (smile in smiles) {
+#     m <- parse.smiles(smile)
+#     ## perform operations on this molecule
+# 
+#     jcall("java/lang/System","V","gc")
+#     gc()
+# }
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  write.molecules(mols, filename='mymols.sdf')
+# write.molecules(mols, filename='mymols.sdf')
 
 ## ----eval=FALSE---------------------------------------------------------------
-#   write.molecules(mols, filename='mymols.sdf', together=FALSE)
+#  write.molecules(mols, filename='mymols.sdf', together=FALSE)
 
 ## -----------------------------------------------------------------------------
 smiles <- c('CCC', 'c1ccccc1', 'CCCC(C)(C)CC(=O)NC')
@@ -59,34 +59,34 @@ get.smiles(m, smiles.flavors(c('CxSmiles')))
 get.smiles(m, smiles.flavors(c('CxCoordinates')))
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  smiles <- c('CCC', 'CCN', 'CCN(C)(C)',
-#              'c1ccccc1Cc1ccccc1',
-#              'C1CCC1CC(CN(C)(C))CC(=O)CC')
-#  mols <- parse.smiles(smiles)
-#  view.molecule.2d(mols[[1]])
-#  view.molecule.2d(mols)
+# smiles <- c('CCC', 'CCN', 'CCN(C)(C)',
+#             'c1ccccc1Cc1ccccc1',
+#             'C1CCC1CC(CN(C)(C))CC(=O)CC')
+# mols <- parse.smiles(smiles)
+# view.molecule.2d(mols[[1]])
+# view.molecule.2d(mols)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  depictor <- get.depictor(style='cob', abbr='reagents', width=300, height=300)
-#  view.molecule.2d(mols[[5]], depictor=depictor)
+# depictor <- get.depictor(style='cob', abbr='reagents', width=300, height=300)
+# view.molecule.2d(mols[[5]], depictor=depictor)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  depictor <- get.depictor(style='cob', abbr='reagents', width=300, height=300)
-#  view.molecule.2d(mols[[5]], depictor=depictor)
-#  #depictor$setStyle('cow')
-#  #view.molecule.2d(mols[[5]], depictor=depictor)
+# depictor <- get.depictor(style='cob', abbr='reagents', width=300, height=300)
+# view.molecule.2d(mols[[5]], depictor=depictor)
+# #depictor$setStyle('cow')
+# #view.molecule.2d(mols[[5]], depictor=depictor)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  depictor <- get.depictor(style='cob', abbr='reagents', sma='N(C)(C)')
-#  view.molecule.2d(mols, depictor=depictor)
+# depictor <- get.depictor(style='cob', abbr='reagents', sma='N(C)(C)')
+# view.molecule.2d(mols, depictor=depictor)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  smiles <- c('CCC', 'CCN', 'CCN(C)(C)','c1ccccc1Cc1ccccc1')
-#  mols <- parse.smiles(smiles)
-#  dframe <- data.frame(x = runif(4),
-#    toxicity = factor(c('Toxic', 'Toxic', 'Nontoxic', 'Nontoxic')),
-#    solubility = c('yes', 'yes', 'no', 'yes'))
-#  view.table(mols, dframe)
+# smiles <- c('CCC', 'CCN', 'CCN(C)(C)','c1ccccc1Cc1ccccc1')
+# mols <- parse.smiles(smiles)
+# dframe <- data.frame(x = runif(4),
+#   toxicity = factor(c('Toxic', 'Toxic', 'Nontoxic', 'Nontoxic')),
+#   solubility = c('yes', 'yes', 'no', 'yes'))
+# view.table(mols, dframe)
 
 ## -----------------------------------------------------------------------------
 img <- view.image.2d(parse.smiles("B([C@H](CC(C)C)NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)C2=NC=CN=C2)(O)O")[[1]])
@@ -103,7 +103,7 @@ get.property(mol, "title")
 get.properties(mol)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  write.molecules(mol, 'tagged.sdf', write.props=TRUE)
+# write.molecules(mol, 'tagged.sdf', write.props=TRUE)
 
 ## -----------------------------------------------------------------------------
 mol <- parse.smiles('c1ccccc1C(Cl)(Br)c1ccccc1')[[1]]
@@ -140,8 +140,8 @@ dn <- get.desc.names(dc[4])
 dn
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  aDesc <- eval.desc(mol, dn[4])
-#  allDescs <- eval.desc(mol, dn)
+# aDesc <- eval.desc(mol, dn[4])
+# allDescs <- eval.desc(mol, dn)
 
 ## -----------------------------------------------------------------------------
 descNames <- unique(unlist(sapply(get.desc.categories(), get.desc.names)))

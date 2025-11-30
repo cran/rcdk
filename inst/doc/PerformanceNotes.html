@@ -12,7 +12,7 @@
 
 <meta name="author" content="Zaachary Charlop-Powers" />
 
-<meta name="date" content="2023-06-29" />
+<meta name="date" content="2025-11-30" />
 
 <title>Performance Notes</title>
 
@@ -50,6 +50,7 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -340,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Performance Notes</h1>
 <h4 class="author">Zaachary Charlop-Powers</h4>
-<h4 class="date">2023-06-29</h4>
+<h4 class="date">2025-11-30</h4>
 
 
 <div id="TOC">
@@ -353,8 +354,8 @@ Performance</a></li>
 
 <div id="rcdk-performance" class="section level2">
 <h2>rCDK Performance</h2>
-<p>In September 2022, of this year, <a href="https://gist.github.com/sneumann">Stepehn Neumann</a> <a href="https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673">created
-a benchmark</a> for moecular weight calculation that he <a href="https://twitter.com/sneumannoffice/status/1570070283083710465?s=20&amp;t=RqJR3Bbh-DEcbCf2tWUEBQ">announced
+<p>In September 2022, of this year, <a href="https://gist.github.com/sneumann">Steffen Neumann</a> <a href="https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673">created
+a benchmark</a> for moecular weight calculation that he <a href="https://x.com/sneumannoffice/status/1570070283083710465?s=20&amp;t=RqJR3Bbh-DEcbCf2tWUEBQ">announced
 on twitter</a> showing that rCDK had dismal performance relative to
 other tools in the R ecosystem. Something seemed a bit off so I looked
 into the code.</p>
@@ -371,12 +372,12 @@ performance, you can tighten down the code a bit by making the calls
 static. You can see that progression in the code below which is
 accompanied by the outputs from those benchmarks.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">will</span> give <span class="er">(</span><span class="ex">2/3</span><span class="kw">)</span> <span class="ex">runtime</span> in µs:</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>   <span class="ex">21</span> OrgMassSpecR </span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>   <span class="ex">21</span> OrgMassSpecR</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="ex">163</span> MetaboCoreUtils</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="ex">197</span> enviPat </span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="ex">545</span> Rdisop </span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="ex">645</span> CHNOSZ </span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a> <span class="ex">4863</span> ChemmineR </span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="ex">197</span> enviPat</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="ex">545</span> Rdisop</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="ex">645</span> CHNOSZ</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a> <span class="ex">4863</span> ChemmineR</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="ex">22510</span> rcdk</span></code></pre></div>
 <p><a href="https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673" class="uri">https://gist.github.com/sneumann/959a6d205ea4ac73eaf1393da0ec0673</a>
 ## Benchmark</p>
@@ -398,7 +399,7 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co"># original</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co"># https://github.com/CDK-R/cdkr/blob/master/rcdk/R/formula.R</span></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co"># get.formula &lt;- function(mf, charge=0) {</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#   manipulator &lt;- get(&quot;mfManipulator&quot;, envir = .rcdk.GlobalEnv)</span></span>
 <span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#   if(!is.character(mf)) {</span></span>
 <span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#     stop(&quot;Must supply a Formula string&quot;);</span></span>
@@ -412,7 +413,7 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#                                .jcast(molecularformula,.IMolecularFormula),</span></span>
 <span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#                                TRUE);</span></span>
 <span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#   }</span></span>
-<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#   D &lt;- new(J(&quot;java/lang/Integer&quot;), as.integer(charge))</span></span>
 <span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#   .jcall(molecularFormula,&quot;V&quot;,&quot;setCharge&quot;,D);</span></span>
 <span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#   object &lt;- .cdkFormula.createObject(.jcast(molecularFormula,.IMolecularFormula));</span></span>
@@ -427,13 +428,13 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&#39; Rewrite the formual object and directly access Java</span></span>
 <span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&#39;</span></span>
 <span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a>get.formula2 <span class="ot">&lt;-</span> <span class="cf">function</span>(mf) {</span>
-<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a>  </span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a></span>
 <span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a>  formula <span class="ot">&lt;-</span> mfManipulator<span class="sc">$</span><span class="fu">getMolecularFormula</span>(</span>
-<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>    <span class="st">&quot;C2H3&quot;</span>, </span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a>    <span class="st">&quot;C2H3&quot;</span>,</span>
 <span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a>    silentchemobject<span class="sc">$</span><span class="fu">getInstance</span>())</span>
-<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a>  </span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a></span>
 <span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a>  mfManipulator<span class="sc">$</span><span class="fu">getMass</span>(formula)</span>
-<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a>  </span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a></span>
 <span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a>}</span>
 <span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a></span>
 <span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&#39; Add type hints</span></span>
@@ -443,7 +444,7 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a>      silentchemobject,</span>
 <span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a>     <span class="st">&quot;Lorg/openscience/cdk/interfaces/IChemObjectBuilder;&quot;</span>,</span>
 <span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a>     <span class="st">&quot;getInstance&quot;</span>)</span>
-<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a>                       </span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a></span>
 <span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a>  formula  <span class="ot">&lt;-</span> <span class="fu">.jcall</span>(</span>
 <span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a>      mfManipulator,</span>
 <span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a>     <span class="st">&quot;Lorg/openscience/cdk/interfaces/IMolecularFormula;&quot;</span>,</span>
@@ -452,7 +453,7 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a>      builderinstance);</span>
 <span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a></span>
 <span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a>  mfManipulator<span class="sc">$</span><span class="fu">getMass</span>(formula)</span>
-<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a>  </span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a></span>
 <span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a>}</span>
 <span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a></span>
 <span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a></span>
@@ -489,10 +490,10 @@ accompanied by the outputs from those benchmarks.</p>
 <span id="cb2-107"><a href="#cb2-107" tabindex="-1"></a>  <span class="at">Rdisop =</span> Rdisop<span class="sc">::</span><span class="fu">getMolecule</span>(<span class="st">&quot;C2H6O&quot;</span>)<span class="sc">$</span>exactmass,</span>
 <span id="cb2-108"><a href="#cb2-108" tabindex="-1"></a>  <span class="at">ChemmineR =</span> ChemmineR<span class="sc">::</span><span class="fu">exactMassOB</span>(ChemmineR<span class="sc">::</span><span class="fu">smiles2sdf</span>(<span class="st">&quot;CCO&quot;</span>)),</span>
 <span id="cb2-109"><a href="#cb2-109" tabindex="-1"></a>  <span class="at">OrgMassSpecR =</span> OrgMassSpecR<span class="sc">::</span><span class="fu">MonoisotopicMass</span>(<span class="at">formula =</span> OrgMassSpecR<span class="sc">::</span><span class="fu">ListFormula</span>(<span class="st">&quot;C2H6O)&quot;</span>), <span class="at">charge =</span> <span class="dv">0</span>),</span>
-<span id="cb2-110"><a href="#cb2-110" tabindex="-1"></a>  </span>
+<span id="cb2-110"><a href="#cb2-110" tabindex="-1"></a></span>
 <span id="cb2-111"><a href="#cb2-111" tabindex="-1"></a>  <span class="at">CHNOSZ =</span> CHNOSZ<span class="sc">::</span><span class="fu">mass</span>(<span class="st">&quot;C2H6O&quot;</span>),</span>
 <span id="cb2-112"><a href="#cb2-112" tabindex="-1"></a>  <span class="at">enviPat =</span> enviPat<span class="sc">::</span><span class="fu">isopattern</span>(isotopes, <span class="st">&quot;C2H6O&quot;</span>, <span class="at">charge=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="cn">FALSE</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>,<span class="dv">1</span>]</span>
-<span id="cb2-113"><a href="#cb2-113" tabindex="-1"></a>  , <span class="at">times=</span>1000L)</span>
+<span id="cb2-113"><a href="#cb2-113" tabindex="-1"></a>  , <span class="at">times=</span><span class="dv">1000</span><span class="dt">L</span>)</span>
 <span id="cb2-114"><a href="#cb2-114" tabindex="-1"></a></span>
 <span id="cb2-115"><a href="#cb2-115" tabindex="-1"></a></span>
 <span id="cb2-116"><a href="#cb2-116" tabindex="-1"></a>masses <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
